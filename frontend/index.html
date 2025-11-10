@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Supplier Selection & Risk Management Dashboard</title>
+    
+    <!-- CSS Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
+    
+    <!-- AOS - Animate On Scroll Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Plotly.js for charts - Updated to latest version -->
+    <script src="https://cdn.plot.ly/plotly-2.35.0.min.js"></script>
+    
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/corporate.css">
+    <link rel="stylesheet" href="assets/css/landing.css">
+    <link rel="stylesheet" href="assets/css/landing-fix.css">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <nav id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="fas fa-rocket"></i> AI Supplier Selection</h3>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="#" data-page="home" class="active"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="#" data-page="supplier-evaluation"><i class="fas fa-chart-line"></i> Supplier Evaluation</a></li>
+            <li><a href="#" data-page="risk-profiling"><i class="fas fa-shield-alt"></i> Risk Profiling</a></li>
+            <li><a href="#" data-page="fraud-prediction"><i class="fas fa-exclamation-triangle"></i> Fraud Prediction</a></li>
+            <li><a href="#" data-page="nlp-contract"><i class="fas fa-file-contract"></i> NLP Contract Analyzer</a></li>
+            <li><a href="#" data-page="decision-support"><i class="fas fa-balance-scale"></i> Decision Support</a></li>
+            <li><a href="#" data-page="ethics-compliance"><i class="fas fa-check-circle"></i> Ethics & Compliance</a></li>
+            <li><a href="#" data-page="transparency"><i class="fas fa-globe"></i> Transparency & Resilience</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <p>Version 1.0.0</p>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main id="main-content" class="main-content">
+        <!-- Top Navigation Bar (hidden on landing page) -->
+        <header class="top-navbar" id="top-navbar">
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h1 class="page-title">Dashboard</h1>
+            <div class="user-info">
+                <span><i class="fas fa-user-circle"></i> Admin</span>
+            </div>
+        </header>
+
+        <!-- Page Content Container -->
+        <div class="content-container" id="main-content-container">
+            <!-- Home Page (Landing Page) -->
+            <div id="page-home" class="page-content active"></div>
+
+            <!-- Supplier Evaluation Page -->
+            <div id="page-supplier-evaluation" class="page-content">
+                <!-- Content will be loaded here -->
+            </div>
+
+            <!-- Risk Profiling Page -->
+            <div id="page-risk-profiling" class="page-content">
+                <!-- Content will be loaded here -->
+            </div>
+
+            <!-- Fraud Prediction Page -->
+            <div id="page-fraud-prediction" class="page-content">
+                <!-- Content will be loaded here -->
+            </div>
+
+            <!-- NLP Contract Analyzer Page -->
+            <div id="page-nlp-contract" class="page-content">
+                <!-- Content will be loaded here -->
+            </div>
+
+            <!-- Decision Support Page -->
+            <div id="page-decision-support" class="page-content">
+                <!-- Content will be loaded here -->
+            </div>
+
+            <!-- Ethics & Compliance Page -->
+            <div id="page-ethics-compliance" class="page-content">
+                <!-- Content will be loaded here -->
+            </div>
+
+            <!-- Transparency & Resilience Page -->
+            <div id="page-transparency" class="page-content">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+        <!-- JavaScript Libraries -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+        
+        <!-- AOS - Animate On Scroll -->
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+        
+        <!-- Custom JavaScript -->
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/api-init-check.js"></script>
+    <script src="assets/js/api-helper.js"></script>
+    <script src="assets/js/pages/home.js"></script>
+    <script src="assets/js/pages/supplier-evaluation.js"></script>
+    <script src="assets/js/pages/risk-profiling.js"></script>
+    <script src="assets/js/pages/fraud-prediction.js"></script>
+    <script src="assets/js/pages/nlp-contract.js"></script>
+    <script src="assets/js/pages/decision-support.js"></script>
+    <script src="assets/js/pages/ethics-compliance.js"></script>
+    <script src="assets/js/pages/transparency.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/init.js"></script>
+    
+    <!-- Initialize AOS (Animate On Scroll) -->
+    <script>
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true,
+            offset: 100,
+            delay: 0
+        });
+    </script>
+    
+    <!-- Debug script (remove in production) -->
+    <script src="assets/js/debug.js"></script>
+    
+    <!-- Fallback initialization -->
+    <script>
+        // Ensure page loads even if there are errors
+        window.addEventListener('load', function() {
+            console.log('Window loaded, checking page state...');
+            setTimeout(function() {
+                const homePage = document.getElementById('page-home');
+                console.log('Home page check:', {
+                    exists: !!homePage,
+                    hasActive: homePage ? homePage.classList.contains('active') : false,
+                    innerHTMLLength: homePage ? homePage.innerHTML.length : 0,
+                    display: homePage ? window.getComputedStyle(homePage).display : 'N/A'
+                });
+                
+                if (homePage) {
+                    // Hide sidebar and navbar on landing page
+                    const sidebar = document.getElementById('sidebar');
+                    const navbar = document.getElementById('top-navbar');
+                    if (sidebar) {
+                        sidebar.style.display = 'none';
+                        sidebar.style.visibility = 'hidden';
+                        sidebar.classList.add('hidden-on-landing');
+                    }
+                    if (navbar) navbar.style.display = 'none';
+                    
+                    // Ensure page is visible
+                    homePage.style.display = 'block';
+                    homePage.style.visibility = 'visible';
+                    homePage.classList.add('active');
+                    
+                    // Ensure main content is full width
+                    const mainContent = document.getElementById('main-content');
+                    const contentContainer = document.getElementById('main-content-container');
+                    if (mainContent) {
+                        mainContent.style.marginLeft = '0';
+                        mainContent.style.width = '100%';
+                    }
+                    if (contentContainer) {
+                        contentContainer.style.padding = '0';
+                        contentContainer.style.margin = '0';
+                        contentContainer.style.width = '100%';
+                        contentContainer.style.maxWidth = '100%';
+                    }
+                    
+                    // If empty, try to load content
+                    if (homePage.innerHTML.trim() === '' || homePage.innerHTML.trim() === '<!-- Content will be loaded here -->') {
+                        console.warn('Home page is empty, attempting to load...');
+                        if (window.HomePage && typeof window.HomePage.init === 'function') {
+                            console.log('Calling HomePage.init()...');
+                            window.HomePage.init().catch(function(err) {
+                                console.error('Error in HomePage.init():', err);
+                            });
+                        } else if (window.app && typeof window.app.navigateToPage === 'function') {
+                            console.log('Calling app.navigateToPage("home")...');
+                            window.app.navigateToPage('home');
+                        } else {
+                            console.error('Neither HomePage.init() nor app.navigateToPage() available');
+                            // Last resort: render basic content
+                            homePage.innerHTML = '<div style="padding: 50px; text-align: center;"><h1>AI Supplier Selection & Risk Management</h1><p>Loading dashboard...</p></div>';
+                        }
+                    }
+                } else {
+                    console.error('Home page element not found!');
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html>
+

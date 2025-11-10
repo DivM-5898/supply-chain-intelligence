@@ -1,0 +1,23 @@
+
+SERVICE CONTRACT
+
+This Service Contract ("Contract") dated May 17, 2025 is between Kelly LLC and Ramirez-Carlson.
+
+SCOPE OF SERVICES:
+- Supplier shall provide Logistics services.
+- Service level agreement: 98.87863519269771% uptime required.
+- Response time: 14 hours for critical issues.
+
+COMPENSATION:
+- Monthly retainer: $27975.280793420214
+- Additional services billed at $173.089813651488 per hour.
+- Payment due within 90 days of invoice.
+
+LIABILITY:
+- Supplier liability limited to $464111.7907636157 per incident.
+- Indemnification clauses apply.
+- Insurance coverage of $5359099.836623577 required.
+
+CONFIDENTIALITY:
+- Both parties agree to maintain confidentiality.
+- Non-disclosure period: 4 years.

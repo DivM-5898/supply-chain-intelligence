@@ -1,0 +1,521 @@
+contract_id,supplier_id,contract_type,content,created_date,expiry_date,status
+CONTRACT_0001,SUP_0019,Supply Agreement,"
+SUPPLY AGREEMENT
+
+This Supply Agreement (""Agreement"") is entered into on October 27, 2025 between Griffin, Moore and Hensley (""Buyer"") 
+and Green-Wright (""Supplier"").
+
+TERM AND DELIVERY:
+- The initial term of this Agreement shall be 4 years.
+- Supplier shall deliver products within 27 business days of order confirmation.
+- Late deliveries may result in penalties of up to 15% of order value.
+
+PRICING AND PAYMENT:
+- Unit price: $103.79956344477583 per unit.
+- Payment terms: Net 90 days.
+- Price adjustments may occur quarterly based on market conditions.
+
+QUALITY AND WARRANTIES:
+- Supplier warrants that all products meet ISO 9001 standards.
+- Defect rate must not exceed 0.03144333000343089%.
+- Buyer has right to reject non-conforming goods.
+
+TERMINATION:
+- Either party may terminate with 30 days written notice.
+- Immediate termination for material breach.
+
+RISK FACTORS:
+- Force majeure clauses apply.
+- Supplier responsible for compliance with all applicable laws.
+",2025-07-14,2027-01-14,Active
+CONTRACT_0002,SUP_0063,Supply Agreement,"
+SUPPLY AGREEMENT
+
+This Supply Agreement (""Agreement"") is entered into on September 02, 2025 between Washington, Allen and Gonzales (""Buyer"") 
+and Mitchell, Nelson and Flores (""Supplier"").
+
+TERM AND DELIVERY:
+- The initial term of this Agreement shall be 2 years.
+- Supplier shall deliver products within 21 business days of order confirmation.
+- Late deliveries may result in penalties of up to 11% of order value.
+
+PRICING AND PAYMENT:
+- Unit price: $472.7798055202087 per unit.
+- Payment terms: Net 30 days.
+- Price adjustments may occur quarterly based on market conditions.
+
+QUALITY AND WARRANTIES:
+- Supplier warrants that all products meet ISO 9001 standards.
+- Defect rate must not exceed 0.03945822932498513%.
+- Buyer has right to reject non-conforming goods.
+
+TERMINATION:
+- Either party may terminate with 90 days written notice.
+- Immediate termination for material breach.
+
+RISK FACTORS:
+- Force majeure clauses apply.
+- Supplier responsible for compliance with all applicable laws.
+",2025-06-06,2026-03-15,Active
+CONTRACT_0003,SUP_0098,Supply Agreement,"
+SUPPLY AGREEMENT
+
+This Supply Agreement (""Agreement"") is entered into on January 01, 2025 between Hall Ltd (""Buyer"") 
+and Mccarthy Inc (""Supplier"").
+
+TERM AND DELIVERY:
+- The initial term of this Agreement shall be 4 years.
+- Supplier shall deliver products within 16 business days of order confirmation.
+- Late deliveries may result in penalties of up to 5% of order value.
+
+PRICING AND PAYMENT:
+- Unit price: $60.529467579957135 per unit.
+- Payment terms: Net 45 days.
+- Price adjustments may occur quarterly based on market conditions.
+
+QUALITY AND WARRANTIES:
+- Supplier warrants that all products meet ISO 9001 standards.
+- Defect rate must not exceed 0.006551871731645746%.
+- Buyer has right to reject non-conforming goods.
+
+TERMINATION:
+- Either party may terminate with 60 days written notice.
+- Immediate termination for material breach.
+
+RISK FACTORS:
+- Force majeure clauses apply.
+- Supplier responsible for compliance with all applicable laws.
+",2025-04-19,2027-08-05,Active
+CONTRACT_0004,SUP_0066,Service Contract,"
+SERVICE CONTRACT
+
+This Service Contract (""Contract"") dated March 17, 2025 is between Owens, Brown and Wall and Stein-Silva.
+
+SCOPE OF SERVICES:
+- Supplier shall provide IT Support services.
+- Service level agreement: 99.53505881847423% uptime required.
+- Response time: 20 hours for critical issues.
+
+COMPENSATION:
+- Monthly retainer: $18378.085563830013
+- Additional services billed at $63.81004791237132 per hour.
+- Payment due within 60 days of invoice.
+
+LIABILITY:
+- Supplier liability limited to $639140.1284353434 per incident.
+- Indemnification clauses apply.
+- Insurance coverage of $6612839.004612395 required.
+
+CONFIDENTIALITY:
+- Both parties agree to maintain confidentiality.
+- Non-disclosure period: 4 years.
+",2025-08-06,2025-12-10,Active
+CONTRACT_0005,SUP_0059,Service Contract,"
+SERVICE CONTRACT
+
+This Service Contract (""Contract"") dated October 07, 2025 is between James, Smith and Bell and Castaneda-Ashley.
+
+SCOPE OF SERVICES:
+- Supplier shall provide IT Support services.
+- Service level agreement: 97.57620547583977% uptime required.
+- Response time: 2 hours for critical issues.
+
+COMPENSATION:
+- Monthly retainer: $43974.303512526116
+- Additional services billed at $192.01005933850934 per hour.
+- Payment due within 45 days of invoice.
+
+LIABILITY:
+- Supplier liability limited to $195315.22396338187 per incident.
+- Indemnification clauses apply.
+- Insurance coverage of $2393457.513379479 required.
+
+CONFIDENTIALITY:
+- Both parties agree to maintain confidentiality.
+- Non-disclosure period: 4 years.
+",2025-04-20,2028-02-24,Pending
+CONTRACT_0006,SUP_0046,Service Contract,"
+SERVICE CONTRACT
+
+This Service Contract (""Contract"") dated August 26, 2025 is between Payne, Morrison and Walker and Nelson Group.
+
+SCOPE OF SERVICES:
+- Supplier shall provide IT Support services.
+- Service level agreement: 96.88950621304167% uptime required.
+- Response time: 7 hours for critical issues.
+
+COMPENSATION:
+- Monthly retainer: $16389.569263082394
+- Additional services billed at $117.53813692143355 per hour.
+- Payment due within 30 days of invoice.
+
+LIABILITY:
+- Supplier liability limited to $961822.9135754356 per incident.
+- Indemnification clauses apply.
+- Insurance coverage of $4591317.858781912 required.
+
+CONFIDENTIALITY:
+- Both parties agree to maintain confidentiality.
+- Non-disclosure period: 2 years.
+",2024-11-20,2027-07-07,Active
+CONTRACT_0007,SUP_0027,Service Contract,"
+SERVICE CONTRACT
+
+This Service Contract (""Contract"") dated March 19, 2025 is between Shelton, Powell and Martin and Calhoun-Hooper.
+
+SCOPE OF SERVICES:
+- Supplier shall provide Consulting services.
+- Service level agreement: 99.36127942477974% uptime required.
+- Response time: 21 hours for critical issues.
+
+COMPENSATION:
+- Monthly retainer: $46154.689873185154
+- Additional services billed at $115.10314590631383 per hour.
+- Payment due within 45 days of invoice.
+
+LIABILITY:
+- Supplier liability limited to $332840.47793989687 per incident.
+- Indemnification clauses apply.
+- Insurance coverage of $4909629.8710594885 required.
+
+CONFIDENTIALITY:
+- Both parties agree to maintain confidentiality.
+- Non-disclosure period: 2 years.
+",2025-06-04,2025-12-21,Active
+CONTRACT_0008,SUP_0069,Service Contract,"
+SERVICE CONTRACT
+
+This Service Contract (""Contract"") dated October 27, 2025 is between Vargas-Alvarado and Day and Sons.
+
+SCOPE OF SERVICES:
+- Supplier shall provide Maintenance services.
+- Service level agreement: 98.20457105246503% uptime required.
+- Response time: 21 hours for critical issues.
+
+COMPENSATION:
+- Monthly retainer: $44486.15209945168
+- Additional services billed at $160.80847260898497 per hour.
+- Payment due within 45 days of invoice.
+
+LIABILITY:
+- Supplier liability limited to $112370.99861021072 per incident.
+- Indemnification clauses apply.
+- Insurance coverage of $3235386.3433282017 required.
+
+CONFIDENTIALITY:
+- Both parties agree to maintain confidentiality.
+- Non-disclosure period: 2 years.
+",2025-10-11,2027-10-28,Active
+CONTRACT_0009,SUP_0077,Service Contract,"
+SERVICE CONTRACT
+
+This Service Contract (""Contract"") dated January 18, 2025 is between Green LLC and Gibson LLC.
+
+SCOPE OF SERVICES:
+- Supplier shall provide Maintenance services.
+- Service level agreement: 95.39763097482758% uptime required.
+- Response time: 16 hours for critical issues.
+
+COMPENSATION:
+- Monthly retainer: $19986.569231242927
+- Additional services billed at $182.74464622708817 per hour.
+- Payment due within 45 days of invoice.
+
+LIABILITY:
+- Supplier liability limited to $444955.81567798124 per incident.
+- Indemnification clauses apply.
+- Insurance coverage of $5441508.929389674 required.
+
+CONFIDENTIALITY:
+- Both parties agree to maintain confidentiality.
+- Non-disclosure period: 4 years.
+",2025-08-31,2027-06-21,Pending
+CONTRACT_0010,SUP_0054,Supply Agreement,"
+SUPPLY AGREEMENT
+
+This Supply Agreement (""Agreement"") is entered into on February 25, 2025 between King-Miller (""Buyer"") 
+and Curry Inc (""Supplier"").
+
+TERM AND DELIVERY:
+- The initial term of this Agreement shall be 2 years.
+- Supplier shall deliver products within 12 business days of order confirmation.
+- Late deliveries may result in penalties of up to 5% of order value.
+
+PRICING AND PAYMENT:
+- Unit price: $134.14501332923408 per unit.
+- Payment terms: Net 60 days.
+- Price adjustments may occur quarterly based on market conditions.
+
+QUALITY AND WARRANTIES:
+- Supplier warrants that all products meet ISO 9001 standards.
+- Defect rate must not exceed 0.026551002184177126%.
+- Buyer has right to reject non-conforming goods.
+
+TERMINATION:
+- Either party may terminate with 90 days written notice.
+- Immediate termination for material breach.
+
+RISK FACTORS:
+- Force majeure clauses apply.
+- Supplier responsible for compliance with all applicable laws.
+",2025-03-24,2026-10-24,Pending
+CONTRACT_0011,SUP_0011,Service Contract,"
+SERVICE CONTRACT
+
+This Service Contract (""Contract"") dated July 19, 2025 is between Harrington Ltd and Webster and Sons.
+
+SCOPE OF SERVICES:
+- Supplier shall provide Logistics services.
+- Service level agreement: 97.4472156723475% uptime required.
+- Response time: 18 hours for critical issues.
+
+COMPENSATION:
+- Monthly retainer: $34219.50460595968
+- Additional services billed at $190.442093220339 per hour.
+- Payment due within 60 days of invoice.
+
+LIABILITY:
+- Supplier liability limited to $157605.71194775883 per incident.
+- Indemnification clauses apply.
+- Insurance coverage of $8422689.136123069 required.
+
+CONFIDENTIALITY:
+- Both parties agree to maintain confidentiality.
+- Non-disclosure period: 3 years.
+",2025-01-25,2025-12-11,Active
+CONTRACT_0012,SUP_0005,Supply Agreement,"
+SUPPLY AGREEMENT
+
+This Supply Agreement (""Agreement"") is entered into on July 08, 2025 between Allen Group (""Buyer"") 
+and Wilson, Gould and Marshall (""Supplier"").
+
+TERM AND DELIVERY:
+- The initial term of this Agreement shall be 4 years.
+- Supplier shall deliver products within 28 business days of order confirmation.
+- Late deliveries may result in penalties of up to 11% of order value.
+
+PRICING AND PAYMENT:
+- Unit price: $37.52627790024512 per unit.
+- Payment terms: Net 45 days.
+- Price adjustments may occur quarterly based on market conditions.
+
+QUALITY AND WARRANTIES:
+- Supplier warrants that all products meet ISO 9001 standards.
+- Defect rate must not exceed 0.0023872524457307217%.
+- Buyer has right to reject non-conforming goods.
+
+TERMINATION:
+- Either party may terminate with 90 days written notice.
+- Immediate termination for material breach.
+
+RISK FACTORS:
+- Force majeure clauses apply.
+- Supplier responsible for compliance with all applicable laws.
+",2025-02-16,2027-06-06,Pending
+CONTRACT_0013,SUP_0063,Service Contract,"
+SERVICE CONTRACT
+
+This Service Contract (""Contract"") dated January 13, 2025 is between Lawson, Adkins and Wilson and Oconnell Inc.
+
+SCOPE OF SERVICES:
+- Supplier shall provide Maintenance services.
+- Service level agreement: 96.41701848685015% uptime required.
+- Response time: 4 hours for critical issues.
+
+COMPENSATION:
+- Monthly retainer: $46605.24749195622
+- Additional services billed at $116.4959764275763 per hour.
+- Payment due within 60 days of invoice.
+
+LIABILITY:
+- Supplier liability limited to $598042.1690791729 per incident.
+- Indemnification clauses apply.
+- Insurance coverage of $3293940.240233941 required.
+
+CONFIDENTIALITY:
+- Both parties agree to maintain confidentiality.
+- Non-disclosure period: 2 years.
+",2025-06-21,2025-12-19,Active
+CONTRACT_0014,SUP_0035,Service Contract,"
+SERVICE CONTRACT
+
+This Service Contract (""Contract"") dated November 04, 2025 is between Johnston-Odonnell and Sanders-Espinoza.
+
+SCOPE OF SERVICES:
+- Supplier shall provide Logistics services.
+- Service level agreement: 96.83024886680847% uptime required.
+- Response time: 7 hours for critical issues.
+
+COMPENSATION:
+- Monthly retainer: $15430.261563020751
+- Additional services billed at $97.79134441454107 per hour.
+- Payment due within 60 days of invoice.
+
+LIABILITY:
+- Supplier liability limited to $913202.5990892773 per incident.
+- Indemnification clauses apply.
+- Insurance coverage of $1698766.9838990313 required.
+
+CONFIDENTIALITY:
+- Both parties agree to maintain confidentiality.
+- Non-disclosure period: 2 years.
+",2024-12-08,2028-05-17,Active
+CONTRACT_0015,SUP_0023,Supply Agreement,"
+SUPPLY AGREEMENT
+
+This Supply Agreement (""Agreement"") is entered into on August 04, 2025 between Sanchez, Terry and Turner (""Buyer"") 
+and Burke, Martinez and Riggs (""Supplier"").
+
+TERM AND DELIVERY:
+- The initial term of this Agreement shall be 2 years.
+- Supplier shall deliver products within 11 business days of order confirmation.
+- Late deliveries may result in penalties of up to 14% of order value.
+
+PRICING AND PAYMENT:
+- Unit price: $443.34450804125595 per unit.
+- Payment terms: Net 90 days.
+- Price adjustments may occur quarterly based on market conditions.
+
+QUALITY AND WARRANTIES:
+- Supplier warrants that all products meet ISO 9001 standards.
+- Defect rate must not exceed 0.04307944968812414%.
+- Buyer has right to reject non-conforming goods.
+
+TERMINATION:
+- Either party may terminate with 90 days written notice.
+- Immediate termination for material breach.
+
+RISK FACTORS:
+- Force majeure clauses apply.
+- Supplier responsible for compliance with all applicable laws.
+",2025-09-08,2026-01-12,Active
+CONTRACT_0016,SUP_0036,Supply Agreement,"
+SUPPLY AGREEMENT
+
+This Supply Agreement (""Agreement"") is entered into on March 23, 2025 between Patterson, Wood and Hunter (""Buyer"") 
+and Smith-Fisher (""Supplier"").
+
+TERM AND DELIVERY:
+- The initial term of this Agreement shall be 4 years.
+- Supplier shall deliver products within 27 business days of order confirmation.
+- Late deliveries may result in penalties of up to 6% of order value.
+
+PRICING AND PAYMENT:
+- Unit price: $270.6256487136819 per unit.
+- Payment terms: Net 90 days.
+- Price adjustments may occur quarterly based on market conditions.
+
+QUALITY AND WARRANTIES:
+- Supplier warrants that all products meet ISO 9001 standards.
+- Defect rate must not exceed 0.026231734145749714%.
+- Buyer has right to reject non-conforming goods.
+
+TERMINATION:
+- Either party may terminate with 60 days written notice.
+- Immediate termination for material breach.
+
+RISK FACTORS:
+- Force majeure clauses apply.
+- Supplier responsible for compliance with all applicable laws.
+",2025-05-18,2026-04-22,Active
+CONTRACT_0017,SUP_0074,Service Contract,"
+SERVICE CONTRACT
+
+This Service Contract (""Contract"") dated April 26, 2025 is between Reid-Poole and Hernandez, Thompson and Boyd.
+
+SCOPE OF SERVICES:
+- Supplier shall provide Logistics services.
+- Service level agreement: 96.07581422382603% uptime required.
+- Response time: 8 hours for critical issues.
+
+COMPENSATION:
+- Monthly retainer: $49381.100237813065
+- Additional services billed at $112.21037404512066 per hour.
+- Payment due within 60 days of invoice.
+
+LIABILITY:
+- Supplier liability limited to $778478.5664532325 per incident.
+- Indemnification clauses apply.
+- Insurance coverage of $8843215.792388804 required.
+
+CONFIDENTIALITY:
+- Both parties agree to maintain confidentiality.
+- Non-disclosure period: 4 years.
+",2025-07-19,2027-01-03,Active
+CONTRACT_0018,SUP_0017,Service Contract,"
+SERVICE CONTRACT
+
+This Service Contract (""Contract"") dated July 06, 2025 is between Hampton, Marshall and Petersen and Adams, Christian and Rivas.
+
+SCOPE OF SERVICES:
+- Supplier shall provide Maintenance services.
+- Service level agreement: 99.63105952490444% uptime required.
+- Response time: 16 hours for critical issues.
+
+COMPENSATION:
+- Monthly retainer: $32253.705019553516
+- Additional services billed at $67.58058585203501 per hour.
+- Payment due within 45 days of invoice.
+
+LIABILITY:
+- Supplier liability limited to $403485.91800917685 per incident.
+- Indemnification clauses apply.
+- Insurance coverage of $2285577.683328987 required.
+
+CONFIDENTIALITY:
+- Both parties agree to maintain confidentiality.
+- Non-disclosure period: 3 years.
+",2024-12-12,2027-01-17,Active
+CONTRACT_0019,SUP_0016,Supply Agreement,"
+SUPPLY AGREEMENT
+
+This Supply Agreement (""Agreement"") is entered into on October 17, 2025 between Sanchez-Marshall (""Buyer"") 
+and Barnett, Rogers and Snyder (""Supplier"").
+
+TERM AND DELIVERY:
+- The initial term of this Agreement shall be 2 years.
+- Supplier shall deliver products within 23 business days of order confirmation.
+- Late deliveries may result in penalties of up to 7% of order value.
+
+PRICING AND PAYMENT:
+- Unit price: $110.11502786549545 per unit.
+- Payment terms: Net 30 days.
+- Price adjustments may occur quarterly based on market conditions.
+
+QUALITY AND WARRANTIES:
+- Supplier warrants that all products meet ISO 9001 standards.
+- Defect rate must not exceed 0.04762065940755837%.
+- Buyer has right to reject non-conforming goods.
+
+TERMINATION:
+- Either party may terminate with 30 days written notice.
+- Immediate termination for material breach.
+
+RISK FACTORS:
+- Force majeure clauses apply.
+- Supplier responsible for compliance with all applicable laws.
+",2025-03-15,2026-08-19,Active
+CONTRACT_0020,SUP_0053,Service Contract,"
+SERVICE CONTRACT
+
+This Service Contract (""Contract"") dated May 17, 2025 is between Kelly LLC and Ramirez-Carlson.
+
+SCOPE OF SERVICES:
+- Supplier shall provide Logistics services.
+- Service level agreement: 98.87863519269771% uptime required.
+- Response time: 14 hours for critical issues.
+
+COMPENSATION:
+- Monthly retainer: $27975.280793420214
+- Additional services billed at $173.089813651488 per hour.
+- Payment due within 90 days of invoice.
+
+LIABILITY:
+- Supplier liability limited to $464111.7907636157 per incident.
+- Indemnification clauses apply.
+- Insurance coverage of $5359099.836623577 required.
+
+CONFIDENTIALITY:
+- Both parties agree to maintain confidentiality.
+- Non-disclosure period: 4 years.
+",2025-10-16,2027-01-13,Active

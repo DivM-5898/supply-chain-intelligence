@@ -1,0 +1,28 @@
+
+SUPPLY AGREEMENT
+
+This Supply Agreement ("Agreement") is entered into on January 01, 2025 between Hall Ltd ("Buyer") 
+and Mccarthy Inc ("Supplier").
+
+TERM AND DELIVERY:
+- The initial term of this Agreement shall be 4 years.
+- Supplier shall deliver products within 16 business days of order confirmation.
+- Late deliveries may result in penalties of up to 5% of order value.
+
+PRICING AND PAYMENT:
+- Unit price: $60.529467579957135 per unit.
+- Payment terms: Net 45 days.
+- Price adjustments may occur quarterly based on market conditions.
+
+QUALITY AND WARRANTIES:
+- Supplier warrants that all products meet ISO 9001 standards.
+- Defect rate must not exceed 0.006551871731645746%.
+- Buyer has right to reject non-conforming goods.
+
+TERMINATION:
+- Either party may terminate with 60 days written notice.
+- Immediate termination for material breach.
+
+RISK FACTORS:
+- Force majeure clauses apply.
+- Supplier responsible for compliance with all applicable laws.

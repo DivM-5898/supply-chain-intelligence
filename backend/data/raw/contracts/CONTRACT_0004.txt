@@ -1,0 +1,23 @@
+
+SERVICE CONTRACT
+
+This Service Contract ("Contract") dated March 17, 2025 is between Owens, Brown and Wall and Stein-Silva.
+
+SCOPE OF SERVICES:
+- Supplier shall provide IT Support services.
+- Service level agreement: 99.53505881847423% uptime required.
+- Response time: 20 hours for critical issues.
+
+COMPENSATION:
+- Monthly retainer: $18378.085563830013
+- Additional services billed at $63.81004791237132 per hour.
+- Payment due within 60 days of invoice.
+
+LIABILITY:
+- Supplier liability limited to $639140.1284353434 per incident.
+- Indemnification clauses apply.
+- Insurance coverage of $6612839.004612395 required.
+
+CONFIDENTIALITY:
+- Both parties agree to maintain confidentiality.
+- Non-disclosure period: 4 years.

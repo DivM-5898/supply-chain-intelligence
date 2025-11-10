@@ -1,0 +1,28 @@
+
+SUPPLY AGREEMENT
+
+This Supply Agreement ("Agreement") is entered into on October 17, 2025 between Sanchez-Marshall ("Buyer") 
+and Barnett, Rogers and Snyder ("Supplier").
+
+TERM AND DELIVERY:
+- The initial term of this Agreement shall be 2 years.
+- Supplier shall deliver products within 23 business days of order confirmation.
+- Late deliveries may result in penalties of up to 7% of order value.
+
+PRICING AND PAYMENT:
+- Unit price: $110.11502786549545 per unit.
+- Payment terms: Net 30 days.
+- Price adjustments may occur quarterly based on market conditions.
+
+QUALITY AND WARRANTIES:
+- Supplier warrants that all products meet ISO 9001 standards.
+- Defect rate must not exceed 0.04762065940755837%.
+- Buyer has right to reject non-conforming goods.
+
+TERMINATION:
+- Either party may terminate with 30 days written notice.
+- Immediate termination for material breach.
+
+RISK FACTORS:
+- Force majeure clauses apply.
+- Supplier responsible for compliance with all applicable laws.

@@ -1,0 +1,23 @@
+
+SERVICE CONTRACT
+
+This Service Contract ("Contract") dated March 19, 2025 is between Shelton, Powell and Martin and Calhoun-Hooper.
+
+SCOPE OF SERVICES:
+- Supplier shall provide Consulting services.
+- Service level agreement: 99.36127942477974% uptime required.
+- Response time: 21 hours for critical issues.
+
+COMPENSATION:
+- Monthly retainer: $46154.689873185154
+- Additional services billed at $115.10314590631383 per hour.
+- Payment due within 45 days of invoice.
+
+LIABILITY:
+- Supplier liability limited to $332840.47793989687 per incident.
+- Indemnification clauses apply.
+- Insurance coverage of $4909629.8710594885 required.
+
+CONFIDENTIALITY:
+- Both parties agree to maintain confidentiality.
+- Non-disclosure period: 2 years.

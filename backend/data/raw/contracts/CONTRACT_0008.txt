@@ -1,0 +1,23 @@
+
+SERVICE CONTRACT
+
+This Service Contract ("Contract") dated October 27, 2025 is between Vargas-Alvarado and Day and Sons.
+
+SCOPE OF SERVICES:
+- Supplier shall provide Maintenance services.
+- Service level agreement: 98.20457105246503% uptime required.
+- Response time: 21 hours for critical issues.
+
+COMPENSATION:
+- Monthly retainer: $44486.15209945168
+- Additional services billed at $160.80847260898497 per hour.
+- Payment due within 45 days of invoice.
+
+LIABILITY:
+- Supplier liability limited to $112370.99861021072 per incident.
+- Indemnification clauses apply.
+- Insurance coverage of $3235386.3433282017 required.
+
+CONFIDENTIALITY:
+- Both parties agree to maintain confidentiality.
+- Non-disclosure period: 2 years.

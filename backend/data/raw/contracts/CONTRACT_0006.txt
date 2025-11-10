@@ -1,0 +1,23 @@
+
+SERVICE CONTRACT
+
+This Service Contract ("Contract") dated August 26, 2025 is between Payne, Morrison and Walker and Nelson Group.
+
+SCOPE OF SERVICES:
+- Supplier shall provide IT Support services.
+- Service level agreement: 96.88950621304167% uptime required.
+- Response time: 7 hours for critical issues.
+
+COMPENSATION:
+- Monthly retainer: $16389.569263082394
+- Additional services billed at $117.53813692143355 per hour.
+- Payment due within 30 days of invoice.
+
+LIABILITY:
+- Supplier liability limited to $961822.9135754356 per incident.
+- Indemnification clauses apply.
+- Insurance coverage of $4591317.858781912 required.
+
+CONFIDENTIALITY:
+- Both parties agree to maintain confidentiality.
+- Non-disclosure period: 2 years.

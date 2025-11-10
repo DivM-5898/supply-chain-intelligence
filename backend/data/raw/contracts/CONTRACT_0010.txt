@@ -1,0 +1,28 @@
+
+SUPPLY AGREEMENT
+
+This Supply Agreement ("Agreement") is entered into on February 25, 2025 between King-Miller ("Buyer") 
+and Curry Inc ("Supplier").
+
+TERM AND DELIVERY:
+- The initial term of this Agreement shall be 2 years.
+- Supplier shall deliver products within 12 business days of order confirmation.
+- Late deliveries may result in penalties of up to 5% of order value.
+
+PRICING AND PAYMENT:
+- Unit price: $134.14501332923408 per unit.
+- Payment terms: Net 60 days.
+- Price adjustments may occur quarterly based on market conditions.
+
+QUALITY AND WARRANTIES:
+- Supplier warrants that all products meet ISO 9001 standards.
+- Defect rate must not exceed 0.026551002184177126%.
+- Buyer has right to reject non-conforming goods.
+
+TERMINATION:
+- Either party may terminate with 90 days written notice.
+- Immediate termination for material breach.
+
+RISK FACTORS:
+- Force majeure clauses apply.
+- Supplier responsible for compliance with all applicable laws.

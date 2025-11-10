@@ -1,0 +1,28 @@
+
+SUPPLY AGREEMENT
+
+This Supply Agreement ("Agreement") is entered into on September 02, 2025 between Washington, Allen and Gonzales ("Buyer") 
+and Mitchell, Nelson and Flores ("Supplier").
+
+TERM AND DELIVERY:
+- The initial term of this Agreement shall be 2 years.
+- Supplier shall deliver products within 21 business days of order confirmation.
+- Late deliveries may result in penalties of up to 11% of order value.
+
+PRICING AND PAYMENT:
+- Unit price: $472.7798055202087 per unit.
+- Payment terms: Net 30 days.
+- Price adjustments may occur quarterly based on market conditions.
+
+QUALITY AND WARRANTIES:
+- Supplier warrants that all products meet ISO 9001 standards.
+- Defect rate must not exceed 0.03945822932498513%.
+- Buyer has right to reject non-conforming goods.
+
+TERMINATION:
+- Either party may terminate with 90 days written notice.
+- Immediate termination for material breach.
+
+RISK FACTORS:
+- Force majeure clauses apply.
+- Supplier responsible for compliance with all applicable laws.

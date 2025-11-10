@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: supplier-selection-frontend
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run main.py --server.port $PORT --server.address 0.0.0.0
+    envVars:
+      - key: BACKEND_API_URL
+        sync: false
+
