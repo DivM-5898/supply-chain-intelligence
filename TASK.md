@@ -1,40 +1,40 @@
-# Fraud & Disruption Prediction
+# NLP Contract Analyzer
 
 ## Task Description
-Develop machine learning models and analytics systems to predict and detect fraudulent activities and potential supply chain disruptions.
+Build a Natural Language Processing system to automatically analyze, extract key information, and identify risks in supply chain contracts and documents.
 
 ## Assigned Team
-- divyansh maiwar
+- Aditya Tripathi
 
 ## Status
 Not started
 
 ## Objectives
-- Build fraud detection models using machine learning
-- Develop disruption prediction algorithms
-- Implement anomaly detection systems
-- Create pattern recognition for suspicious activities
-- Build early warning system for disruptions
+- Develop NLP models for contract text analysis
+- Implement key information extraction (entities, clauses, obligations)
+- Build clause classification and risk identification
+- Create contract comparison and similarity analysis
+- Develop automated contract review and summarization
 
 ## Deliverables
-- ML models for fraud detection (classification, anomaly detection)
-- Disruption prediction models (time series, forecasting)
-- Feature engineering pipeline for prediction models
-- Model training and evaluation framework
-- Real-time prediction API endpoints
-- Alert and notification system
-- Dashboard for fraud and disruption monitoring
-- Model performance monitoring and retraining pipeline
+- NLP pipeline for contract processing
+- Named Entity Recognition (NER) for contract elements
+- Clause classification models
+- Risk and obligation extraction algorithms
+- Contract summarization system
+- API endpoints for contract analysis
+- UI for contract upload and analysis results
+- Database schema for storing contract data and analysis results
 
 ## Priority
 P0
 
 ## Notes
-Focus areas:
-- Invoice and payment fraud detection
-- Supplier authentication and verification
-- Document forgery detection
-- Supply chain disruption prediction (natural disasters, geopolitical events, etc.)
-- Inventory anomalies
-- Shipping and logistics irregularities
-- Historical pattern analysis
+Key capabilities:
+- Extract parties, dates, payment terms, delivery terms
+- Identify liability clauses, termination conditions, penalties
+- Flag risky or unusual contract terms
+- Compare contracts for consistency
+- Highlight missing standard clauses
+- Support multiple document formats (PDF, DOCX, etc.)
+- Multi-language support consideration
