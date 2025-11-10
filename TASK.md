@@ -1,40 +1,35 @@
-# NLP Contract Analyzer
+# Landing Page Dashboard
 
 ## Task Description
-Build a Natural Language Processing system to automatically analyze, extract key information, and identify risks in supply chain contracts and documents.
+Design and develop the main landing page dashboard that serves as the entry point and navigation hub for the Supply Chain Intelligence Platform.
 
 ## Assigned Team
-- Aditya Tripathi
+- anushree.as24dxb017@spjain.org
 
 ## Status
 Not started
 
 ## Objectives
-- Develop NLP models for contract text analysis
-- Implement key information extraction (entities, clauses, obligations)
-- Build clause classification and risk identification
-- Create contract comparison and similarity analysis
-- Develop automated contract review and summarization
+- Create intuitive and user-friendly landing page interface
+- Design dashboard layout with key metrics and insights
+- Implement navigation to all platform modules
+- Display high-level supply chain status and alerts
+- Ensure responsive design for various devices
 
 ## Deliverables
-- NLP pipeline for contract processing
-- Named Entity Recognition (NER) for contract elements
-- Clause classification models
-- Risk and obligation extraction algorithms
-- Contract summarization system
-- API endpoints for contract analysis
-- UI for contract upload and analysis results
-- Database schema for storing contract data and analysis results
+- Landing page UI/UX design mockups
+- Frontend implementation (HTML/CSS/JS or framework)
+- Dashboard widgets and components
+- Navigation menu and routing
+- Integration with backend APIs for data display
 
 ## Priority
 P0
 
 ## Notes
-Key capabilities:
-- Extract parties, dates, payment terms, delivery terms
-- Identify liability clauses, termination conditions, penalties
-- Flag risky or unusual contract terms
-- Compare contracts for consistency
-- Highlight missing standard clauses
-- Support multiple document formats (PDF, DOCX, etc.)
-- Multi-language support consideration
+The landing page should provide:
+- Quick access to all major features
+- Real-time status indicators
+- Key performance metrics overview
+- Alert notifications
+- User profile and settings access
