@@ -1,38 +1,40 @@
-# Supplier Evaluation & Scoring
+# Multi-Criteria Decision Support
 
 ## Task Description
-Develop a comprehensive supplier evaluation and scoring system to assess and rank suppliers based on multiple criteria and performance metrics.
+Develop a decision support system that evaluates options based on multiple criteria and provides recommendations for complex supply chain decisions.
 
 ## Assigned Team
-- anushree.as24dxb017@spjain.org
+- DK
 
 ## Status
 Not started
 
 ## Objectives
-- Define supplier evaluation criteria and metrics
-- Implement scoring algorithms and weightage system
-- Create supplier profile and performance tracking
-- Develop comparative analysis tools
-- Build visualization for supplier rankings
+- Implement multi-criteria decision analysis (MCDA) algorithms
+- Build criteria weighting and prioritization system
+- Create scenario comparison and what-if analysis
+- Develop recommendation engine with justification
+- Build visualization for decision alternatives
 
 ## Deliverables
-- Supplier evaluation framework and methodology
-- Scoring algorithm implementation
-- Database schema for supplier data
-- API endpoints for supplier evaluation
-- UI for supplier comparison and selection
-- Reporting and analytics dashboards
+- MCDA algorithms implementation (AHP, TOPSIS, ELECTRE, etc.)
+- Criteria management system (definition, weighting, normalization)
+- Decision matrix and scoring framework
+- Scenario analysis and simulation tools
+- API endpoints for decision analysis
+- Interactive decision support dashboard
+- Sensitivity analysis and reports
+- Decision history and audit trail
 
 ## Priority
 P0
 
 ## Notes
-Evaluation criteria should include:
-- Quality metrics
-- Delivery performance
-- Cost competitiveness
-- Compliance and certifications
-- Financial stability
-- Risk factors
-- Sustainability practices
+Decision scenarios to support:
+- Supplier selection and switching
+- Sourcing strategy optimization
+- Inventory management decisions
+- Route and logistics optimization
+- Risk mitigation strategy selection
+- Investment prioritization
+- Contract negotiation support
