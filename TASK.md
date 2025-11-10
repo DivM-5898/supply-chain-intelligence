@@ -1,43 +1,38 @@
-# Transparency & Resilience
+# Supplier Evaluation & Scoring
 
 ## Task Description
-Develop systems to enhance supply chain visibility, transparency, and resilience capabilities, enabling stakeholders to track operations and respond effectively to disruptions.
+Develop a comprehensive supplier evaluation and scoring system to assess and rank suppliers based on multiple criteria and performance metrics.
 
 ## Assigned Team
-- sumith swaroop
+- anushree.as24dxb017@spjain.org
 
 ## Status
 Not started
 
 ## Objectives
-- Build end-to-end supply chain visibility platform
-- Implement traceability and provenance tracking
-- Develop resilience assessment and stress testing
-- Create contingency planning and response systems
-- Build stakeholder transparency and reporting tools
+- Define supplier evaluation criteria and metrics
+- Implement scoring algorithms and weightage system
+- Create supplier profile and performance tracking
+- Develop comparative analysis tools
+- Build visualization for supplier rankings
 
 ## Deliverables
-- Supply chain mapping and visualization tools
-- Real-time tracking and monitoring systems
-- Blockchain or distributed ledger integration for traceability
-- Resilience metrics and KPIs framework
-- Scenario planning and simulation tools
-- Business continuity planning module
-- Stakeholder portal for transparency
-- API endpoints for visibility data
+- Supplier evaluation framework and methodology
+- Scoring algorithm implementation
+- Database schema for supplier data
+- API endpoints for supplier evaluation
+- UI for supplier comparison and selection
 - Reporting and analytics dashboards
 
 ## Priority
 P0
 
 ## Notes
-Key features:
-- End-to-end product journey tracking
-- Multi-tier supplier visibility
-- Real-time shipment and inventory tracking
-- Supply chain network mapping
-- Resilience scoring and assessment
-- Alternative sourcing options
-- Crisis response playbooks
-- Stakeholder communication tools
-- Sustainability and carbon footprint tracking
+Evaluation criteria should include:
+- Quality metrics
+- Delivery performance
+- Cost competitiveness
+- Compliance and certifications
+- Financial stability
+- Risk factors
+- Sustainability practices
