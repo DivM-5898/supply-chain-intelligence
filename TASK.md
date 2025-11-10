@@ -1,40 +1,48 @@
-# Github Repository - Structuring the Repository Such that Each Module Can Be Worked in Parallel
+# PPT and Reports
 
 ## Task Description
-Design and implement a repository structure that enables parallel development of all modules with minimal conflicts and efficient collaboration.
+Develop comprehensive presentation materials and reporting capabilities for the Supply Chain Intelligence Platform, including automated report generation and executive presentations.
 
 ## Assigned Team
-- Divyansh maiwar
-- Aditya tripathi
-- Dharmik Kothari 
-- Anushree
-- joyti swaroop
+- anushree.as24dxb017@spjain.org
+- Aditya Tripathi
+- divyansh maiwar
+- DK
+- sumith swaroop
 
 ## Status
 Not started
 
 ## Objectives
-- Define directory structure for modular development
-- Set up branching strategy for parallel work
-- Establish coding standards and conventions
-- Configure CI/CD pipeline structure
-- Document development workflow and best practices
+- Create executive presentation templates
+- Develop automated report generation system
+- Build customizable reporting dashboards
+- Design data visualization templates
+- Implement export capabilities (PDF, PPT, Excel)
 
 ## Deliverables
-- Repository folder structure
-- Branch protection rules and guidelines
-- `.gitignore` configuration
-- Development workflow documentation
-- Code review and merge process guidelines
-- CI/CD configuration files
+- Executive presentation deck template
+- Technical documentation and user guides
+- Automated report generation engine
+- Report scheduling and distribution system
+- Customizable report templates
+- Data export functionality
+- Interactive report builder
+- Performance and analytics reports
+- Project documentation and case studies
 
 ## Priority
 P0
 
 ## Notes
-Key considerations:
-- Enable independent module development
-- Minimize merge conflicts
-- Clear separation of concerns
-- Consistent structure across all modules
-- Scalable for future additions
+Report types to include:
+- Executive summary dashboards
+- Supplier performance reports
+- Risk assessment reports
+- Compliance and audit reports
+- Predictive analytics insights
+- ROI and business impact reports
+- Custom ad-hoc reports
+- Scheduled periodic reports
+
+This task involves documentation and presentation of all platform features and results.
