@@ -1,35 +1,40 @@
-# Application Vision and Architecture Diagram
+# Fraud & Disruption Prediction
 
 ## Task Description
-Create a comprehensive vision document and architecture diagram for the Supply Chain Intelligence Platform.
+Develop machine learning models and analytics systems to predict and detect fraudulent activities and potential supply chain disruptions.
 
 ## Assigned Team
-- Aditya Tripathi
+- divyansh maiwar
 
 ## Status
-In progress
+Not started
 
 ## Objectives
-- Define the overall vision and goals of the platform
-- Design the system architecture
-- Create visual architecture diagrams
-- Document key components and their interactions
-- Define technology stack and infrastructure requirements
+- Build fraud detection models using machine learning
+- Develop disruption prediction algorithms
+- Implement anomaly detection systems
+- Create pattern recognition for suspicious activities
+- Build early warning system for disruptions
 
 ## Deliverables
-- Vision document outlining platform goals and capabilities
-- System architecture diagram(s)
-- Component interaction diagrams
-- Technology stack recommendations
-- Infrastructure and deployment architecture
+- ML models for fraud detection (classification, anomaly detection)
+- Disruption prediction models (time series, forecasting)
+- Feature engineering pipeline for prediction models
+- Model training and evaluation framework
+- Real-time prediction API endpoints
+- Alert and notification system
+- Dashboard for fraud and disruption monitoring
+- Model performance monitoring and retraining pipeline
 
 ## Priority
 P0
 
 ## Notes
-This task sets the foundation for all other development work. The architecture should support:
-- Modular feature development
-- Scalability and performance
-- Data security and compliance
-- Integration capabilities
-- User experience considerations
+Focus areas:
+- Invoice and payment fraud detection
+- Supplier authentication and verification
+- Document forgery detection
+- Supply chain disruption prediction (natural disasters, geopolitical events, etc.)
+- Inventory anomalies
+- Shipping and logistics irregularities
+- Historical pattern analysis
