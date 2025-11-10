@@ -1,48 +1,43 @@
-# PPT and Reports
+# Transparency & Resilience
 
 ## Task Description
-Develop comprehensive presentation materials and reporting capabilities for the Supply Chain Intelligence Platform, including automated report generation and executive presentations.
+Develop systems to enhance supply chain visibility, transparency, and resilience capabilities, enabling stakeholders to track operations and respond effectively to disruptions.
 
 ## Assigned Team
-- anushree.as24dxb017@spjain.org
-- Aditya Tripathi
-- divyansh maiwar
-- DK
 - sumith swaroop
 
 ## Status
 Not started
 
 ## Objectives
-- Create executive presentation templates
-- Develop automated report generation system
-- Build customizable reporting dashboards
-- Design data visualization templates
-- Implement export capabilities (PDF, PPT, Excel)
+- Build end-to-end supply chain visibility platform
+- Implement traceability and provenance tracking
+- Develop resilience assessment and stress testing
+- Create contingency planning and response systems
+- Build stakeholder transparency and reporting tools
 
 ## Deliverables
-- Executive presentation deck template
-- Technical documentation and user guides
-- Automated report generation engine
-- Report scheduling and distribution system
-- Customizable report templates
-- Data export functionality
-- Interactive report builder
-- Performance and analytics reports
-- Project documentation and case studies
+- Supply chain mapping and visualization tools
+- Real-time tracking and monitoring systems
+- Blockchain or distributed ledger integration for traceability
+- Resilience metrics and KPIs framework
+- Scenario planning and simulation tools
+- Business continuity planning module
+- Stakeholder portal for transparency
+- API endpoints for visibility data
+- Reporting and analytics dashboards
 
 ## Priority
 P0
 
 ## Notes
-Report types to include:
-- Executive summary dashboards
-- Supplier performance reports
-- Risk assessment reports
-- Compliance and audit reports
-- Predictive analytics insights
-- ROI and business impact reports
-- Custom ad-hoc reports
-- Scheduled periodic reports
-
-This task involves documentation and presentation of all platform features and results.
+Key features:
+- End-to-end product journey tracking
+- Multi-tier supplier visibility
+- Real-time shipment and inventory tracking
+- Supply chain network mapping
+- Resilience scoring and assessment
+- Alternative sourcing options
+- Crisis response playbooks
+- Stakeholder communication tools
+- Sustainability and carbon footprint tracking
