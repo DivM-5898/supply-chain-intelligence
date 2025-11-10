@@ -1,40 +1,40 @@
-# Multi-Criteria Decision Support
+# Risk Profiling & Comparison
 
 ## Task Description
-Develop a decision support system that evaluates options based on multiple criteria and provides recommendations for complex supply chain decisions.
+Build a risk assessment and profiling system to identify, analyze, and compare various risks across the supply chain network.
 
 ## Assigned Team
-- DK
+- sumith swaroop
 
 ## Status
 Not started
 
 ## Objectives
-- Implement multi-criteria decision analysis (MCDA) algorithms
-- Build criteria weighting and prioritization system
-- Create scenario comparison and what-if analysis
-- Develop recommendation engine with justification
-- Build visualization for decision alternatives
+- Develop risk identification and categorization framework
+- Implement risk assessment algorithms
+- Create risk scoring and heat mapping
+- Build comparative risk analysis tools
+- Develop risk mitigation recommendation engine
 
 ## Deliverables
-- MCDA algorithms implementation (AHP, TOPSIS, ELECTRE, etc.)
-- Criteria management system (definition, weighting, normalization)
-- Decision matrix and scoring framework
-- Scenario analysis and simulation tools
-- API endpoints for decision analysis
-- Interactive decision support dashboard
-- Sensitivity analysis and reports
-- Decision history and audit trail
+- Risk taxonomy and classification system
+- Risk assessment models and algorithms
+- Database schema for risk data
+- Risk profiling API endpoints
+- Risk comparison dashboard and visualizations
+- Risk heat maps and trend analysis
+- Alert and notification system for high-risk scenarios
 
 ## Priority
 P0
 
 ## Notes
-Decision scenarios to support:
-- Supplier selection and switching
-- Sourcing strategy optimization
-- Inventory management decisions
-- Route and logistics optimization
-- Risk mitigation strategy selection
-- Investment prioritization
-- Contract negotiation support
+Risk categories to address:
+- Geopolitical risks
+- Financial risks
+- Operational risks
+- Supplier-specific risks
+- Environmental and climate risks
+- Cybersecurity risks
+- Regulatory and compliance risks
+- Market volatility risks
