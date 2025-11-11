@@ -1,102 +1,66 @@
-# AI Supplier Selection & Risk Management Dashboard
+# Supply Chain Intelligence Platform
 
-A comprehensive full-stack AI-powered platform for supplier evaluation, risk management, and procurement decision-making.
+## Project Overview
+This repository contains the modular development of a comprehensive Supply Chain Intelligence Platform. Each feature is developed in a separate branch to enable parallel work streams.
 
-## 🎯 Project Overview
+## Project Structure
+All development work is organized into feature branches. Each branch corresponds to a specific module or task as outlined below.
 
-This application provides an executive-grade AI decision platform that empowers leadership with data-driven insights for supplier selection and risk management. The platform combines cutting-edge machine learning, natural language processing, and optimization algorithms to deliver actionable insights in real-time.
+## Tasks and Branches
 
-## 🏗️ Architecture
+### P0 Priority Tasks
 
-- **Backend**: FastAPI REST API (Python) - Handles ML models, NLP, data processing
-- **Frontend**: Streamlit (Python) - Interactive dashboard with visualizations
-- **Database**: PostgreSQL (Render free tier) - Data persistence
-- **Deployment**: Two separate Render services (backend + frontend)
+| Task | Branch Name | Assigned Team | Status |
+|------|-------------|---------------|---------|
+| Application Vision and Architecture Diagram | `feature/application-vision` | Aditya Tripathi | In progress |
+| Github Repository - Structuring the Repository | `feature/repo-structure` | divyansh maiwar | Not started |
+| Landing Page Dashboard | `feature/landing-dashboard` | anushree.as24dxb017@spjain.org | Not started |
+| Supplier Evaluation & Scoring | `feature/supplier-evaluation` | anushree.as24dxb017@spjain.org | Not started |
+| Risk Profiling & Comparison | `feature/risk-profiling` | sumith swaroop | Not started |
+| Fraud & Disruption Prediction | `feature/fraud-prediction` | divyansh maiwar | Not started |
+| NLP Contract Analyzer | `feature/nlp-contract-analyzer` | Aditya Tripathi | Not started |
+| Multi-Criteria Decision Support | `feature/multi-criteria-decision` | DK | Not started |
+| Ethics & Compliance | `feature/ethics-compliance` | divyansh maiwar | Not started |
+| Transparency & Resilience | `feature/transparency-resilience` | sumith swaroop | Not started |
+| Refining the whole Dashboard | `feature/dashboard-refinement` | Aditya Tripathi, divyansh maiwar, DK | Not started |
+| PPT and Reports | `feature/ppt-reports` | anushree.as24dxb017@spjain.org, Aditya Tripathi, divyansh maiwar, DK, sumith swaroop | Not started |
 
-## 📋 Features
+## Development Workflow
 
-### Seven Analytical Capabilities
+1. **Branch Creation**: Each feature has its own dedicated branch
+2. **Parallel Development**: Multiple team members can work simultaneously on different features
+3. **Integration**: Features will be merged into main branch after review
+4. **Collaboration**: Use pull requests for code review and integration
 
-1. **Supplier Evaluation & Scoring** - ML-powered scoring using XGBoost and Random Forest
-2. **Risk Profiling & Comparison** - Multi-dimensional risk analysis across suppliers
-3. **Fraud & Disruption Prediction** - Predictive models for fraud and supply chain disruptions
-4. **NLP Contract Analyzer** - BERT and spaCy for contract analysis and risk extraction
-5. **Multi-Criteria Decision Support** - TOPSIS and AHP for optimal supplier selection
-6. **Ethics & Compliance** - SHAP/LIME explainability and bias detection
-7. **Transparency & Resilience** - Global supply chain visualization and resilience metrics
+## Getting Started
 
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Python 3.9+
-- PostgreSQL (for production)
-- Virtual environment (recommended)
-
-### Backend Setup
-
+### Clone the repository
 ```bash
-cd backend
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn main:app --reload
+git clone <repository-url>
+cd supply-chain-intelligence
 ```
 
-### Frontend Setup
-
+### Switch to a specific feature branch
 ```bash
-cd frontend
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-streamlit run main.py
+git checkout <branch-name>
 ```
 
-### Generate Sample Data & Train Models
-
+### Create a new feature branch (if needed)
 ```bash
-cd backend
-python -m services.data_generator
-python -m services.model_trainer
+git checkout -b feature/<feature-name>
 ```
 
-## 📁 Project Structure
+## Branch Naming Convention
+- Format: `feature/<descriptive-name>`
+- Use kebab-case for branch names
+- Keep names concise but descriptive
 
-```
-AI_IN_OPERATIONS/
-├── backend/          # FastAPI backend service
-├── frontend/         # Streamlit frontend application
-├── notebooks/        # Data exploration and model training
-├── tests/           # Unit and integration tests
-└── docs/            # Documentation
-```
+## Team Members
+- Aditya Tripathi
+- divyansh maiwar
+- anushree.as24dxb017@spjain.org
+- DK
+- sumith swaroop
 
-## 🛠️ Technology Stack
-
-- **ML**: scikit-learn, XGBoost, Random Forest
-- **NLP**: transformers (BERT), spaCy
-- **Visualization**: Plotly, Matplotlib
-- **Explainability**: SHAP, LIME
-- **Decision Support**: TOPSIS, AHP
-- **API**: FastAPI
-- **Frontend**: Streamlit
-
-## 📊 Key Questions Addressed
-
-- How can AI assist in evaluating and selecting suppliers?
-- What data sources are used for supplier risk profiling?
-- How can ML models predict supplier disruptions or fraud?
-- What role does NLP play in analyzing supplier documents?
-- How can AI support multi-criteria decision-making?
-- What are the ethical and compliance considerations?
-- How can AI enhance transparency and resilience?
-
-## 📝 License
-
-MIT License
-
-## 👥 Contributing
-
-This is a group project for AI in Operations course.
-
+## Contributing
+Please ensure you're working on the correct branch for your assigned task. Coordinate with team members for shared tasks.
