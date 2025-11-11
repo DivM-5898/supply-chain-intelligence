@@ -1,0 +1,39 @@
+/* Hide sidebar on landing page */
+body:has(#page-home.active) .sidebar,
+#page-home.active ~ .sidebar,
+.sidebar.hidden-on-landing {
+    display: none !important;
+    visibility: hidden !important;
+    transform: translateX(-100%) !important;
+}
+
+/* Main Content Area - Fixed for Landing Page */
+.main-content {
+    margin-left: 260px;
+    min-height: 100vh;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    background-color: #f8fafc;
+    width: calc(100% - 260px);
+}
+
+/* When landing page is active, make it full width */
+body:has(#page-home.active) .main-content,
+#page-home.active ~ .main-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+}
+
+body:has(#page-home.active) .content-container,
+#page-home.active ~ .content-container {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* Ensure landing page sections are full width */
+#page-home.active section {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+

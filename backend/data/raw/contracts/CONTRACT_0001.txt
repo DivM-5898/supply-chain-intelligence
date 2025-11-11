@@ -1,0 +1,28 @@
+
+SUPPLY AGREEMENT
+
+This Supply Agreement ("Agreement") is entered into on October 27, 2025 between Griffin, Moore and Hensley ("Buyer") 
+and Green-Wright ("Supplier").
+
+TERM AND DELIVERY:
+- The initial term of this Agreement shall be 4 years.
+- Supplier shall deliver products within 27 business days of order confirmation.
+- Late deliveries may result in penalties of up to 15% of order value.
+
+PRICING AND PAYMENT:
+- Unit price: $103.79956344477583 per unit.
+- Payment terms: Net 90 days.
+- Price adjustments may occur quarterly based on market conditions.
+
+QUALITY AND WARRANTIES:
+- Supplier warrants that all products meet ISO 9001 standards.
+- Defect rate must not exceed 0.03144333000343089%.
+- Buyer has right to reject non-conforming goods.
+
+TERMINATION:
+- Either party may terminate with 30 days written notice.
+- Immediate termination for material breach.
+
+RISK FACTORS:
+- Force majeure clauses apply.
+- Supplier responsible for compliance with all applicable laws.

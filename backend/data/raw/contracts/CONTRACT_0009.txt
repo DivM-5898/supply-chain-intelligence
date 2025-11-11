@@ -1,0 +1,23 @@
+
+SERVICE CONTRACT
+
+This Service Contract ("Contract") dated January 18, 2025 is between Green LLC and Gibson LLC.
+
+SCOPE OF SERVICES:
+- Supplier shall provide Maintenance services.
+- Service level agreement: 95.39763097482758% uptime required.
+- Response time: 16 hours for critical issues.
+
+COMPENSATION:
+- Monthly retainer: $19986.569231242927
+- Additional services billed at $182.74464622708817 per hour.
+- Payment due within 45 days of invoice.
+
+LIABILITY:
+- Supplier liability limited to $444955.81567798124 per incident.
+- Indemnification clauses apply.
+- Insurance coverage of $5441508.929389674 required.
+
+CONFIDENTIALITY:
+- Both parties agree to maintain confidentiality.
+- Non-disclosure period: 4 years.

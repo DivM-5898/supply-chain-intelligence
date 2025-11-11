@@ -1,0 +1,23 @@
+
+SERVICE CONTRACT
+
+This Service Contract ("Contract") dated July 06, 2025 is between Hampton, Marshall and Petersen and Adams, Christian and Rivas.
+
+SCOPE OF SERVICES:
+- Supplier shall provide Maintenance services.
+- Service level agreement: 99.63105952490444% uptime required.
+- Response time: 16 hours for critical issues.
+
+COMPENSATION:
+- Monthly retainer: $32253.705019553516
+- Additional services billed at $67.58058585203501 per hour.
+- Payment due within 45 days of invoice.
+
+LIABILITY:
+- Supplier liability limited to $403485.91800917685 per incident.
+- Indemnification clauses apply.
+- Insurance coverage of $2285577.683328987 required.
+
+CONFIDENTIALITY:
+- Both parties agree to maintain confidentiality.
+- Non-disclosure period: 3 years.

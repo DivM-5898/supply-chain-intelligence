@@ -1,0 +1,23 @@
+
+SERVICE CONTRACT
+
+This Service Contract ("Contract") dated April 26, 2025 is between Reid-Poole and Hernandez, Thompson and Boyd.
+
+SCOPE OF SERVICES:
+- Supplier shall provide Logistics services.
+- Service level agreement: 96.07581422382603% uptime required.
+- Response time: 8 hours for critical issues.
+
+COMPENSATION:
+- Monthly retainer: $49381.100237813065
+- Additional services billed at $112.21037404512066 per hour.
+- Payment due within 60 days of invoice.
+
+LIABILITY:
+- Supplier liability limited to $778478.5664532325 per incident.
+- Indemnification clauses apply.
+- Insurance coverage of $8843215.792388804 required.
+
+CONFIDENTIALITY:
+- Both parties agree to maintain confidentiality.
+- Non-disclosure period: 4 years.

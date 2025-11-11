@@ -1,0 +1,23 @@
+
+SERVICE CONTRACT
+
+This Service Contract ("Contract") dated January 13, 2025 is between Lawson, Adkins and Wilson and Oconnell Inc.
+
+SCOPE OF SERVICES:
+- Supplier shall provide Maintenance services.
+- Service level agreement: 96.41701848685015% uptime required.
+- Response time: 4 hours for critical issues.
+
+COMPENSATION:
+- Monthly retainer: $46605.24749195622
+- Additional services billed at $116.4959764275763 per hour.
+- Payment due within 60 days of invoice.
+
+LIABILITY:
+- Supplier liability limited to $598042.1690791729 per incident.
+- Indemnification clauses apply.
+- Insurance coverage of $3293940.240233941 required.
+
+CONFIDENTIALITY:
+- Both parties agree to maintain confidentiality.
+- Non-disclosure period: 2 years.

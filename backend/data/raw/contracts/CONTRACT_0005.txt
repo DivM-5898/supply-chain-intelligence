@@ -1,0 +1,23 @@
+
+SERVICE CONTRACT
+
+This Service Contract ("Contract") dated October 07, 2025 is between James, Smith and Bell and Castaneda-Ashley.
+
+SCOPE OF SERVICES:
+- Supplier shall provide IT Support services.
+- Service level agreement: 97.57620547583977% uptime required.
+- Response time: 2 hours for critical issues.
+
+COMPENSATION:
+- Monthly retainer: $43974.303512526116
+- Additional services billed at $192.01005933850934 per hour.
+- Payment due within 45 days of invoice.
+
+LIABILITY:
+- Supplier liability limited to $195315.22396338187 per incident.
+- Indemnification clauses apply.
+- Insurance coverage of $2393457.513379479 required.
+
+CONFIDENTIALITY:
+- Both parties agree to maintain confidentiality.
+- Non-disclosure period: 4 years.
