@@ -29,7 +29,7 @@ window.HomePage = {
                 try {
                     this.setupAnimations();
                     this.loadStats();
-                    this.loadCharts();
+                    this.setupWorkflow();
                     this.setupScrollReveal();
                     console.log('Landing page initialized successfully');
                 } catch (error) {
@@ -83,6 +83,288 @@ window.HomePage = {
                     <div class="stat-card" data-aos="zoom-in" data-aos-delay="400">
                         <div class="stat-value" id="stat-models">7+</div>
                         <div class="stat-label">ML Models</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interactive Workflow Visualization Section -->
+            <section class="workflow-section" data-aos="fade-up">
+                <div class="container">
+                    <h2 class="text-center mb-2" data-aos="fade-up" style="font-size: 2.5rem; font-weight: 700; color: var(--corp-gray-900);">
+                        AI-Powered Supplier Selection Workflow
+                    </h2>
+                    <p class="text-center mb-5" data-aos="fade-up" data-aos-delay="100" style="font-size: 1.2rem; color: var(--corp-gray-600); max-width: 700px; margin: 0 auto 3rem;">
+                        Follow the complete journey from data ingestion to intelligent decision-making
+                    </p>
+                    
+                    <div class="workflow-container" id="workflow-container">
+                        <!-- Workflow Steps -->
+                        <div class="workflow-step" data-step="1" data-aos="fade-right" data-aos-delay="100">
+                            <div class="workflow-step-icon">
+                                <i class="fas fa-database"></i>
+                                <div class="workflow-pulse"></div>
+                                <div class="workflow-step-number">1</div>
+                            </div>
+                            <div class="workflow-step-content">
+                                <h3>Data Collection</h3>
+                                <p>Synthetic supplier datasets with comprehensive metrics</p>
+                                <div class="workflow-badge">100+ Suppliers</div>
+                                <div class="workflow-details" style="display: none;">
+                                    <div class="workflow-detail-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Comprehensive supplier profiles</span>
+                                    </div>
+                                    <div class="workflow-detail-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Historical performance data</span>
+                                    </div>
+                                    <div class="workflow-detail-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Real-time metrics tracking</span>
+                                    </div>
+                                </div>
+                                <button class="workflow-learn-more">
+                                    <i class="fas fa-info-circle"></i> Learn More
+                                </button>
+                            </div>
+                            <div class="workflow-connector">
+                                <div class="workflow-line"></div>
+                                <div class="workflow-arrow"><i class="fas fa-arrow-right"></i></div>
+                            </div>
+                        </div>
+
+                        <div class="workflow-step" data-step="2" data-aos="fade-right" data-aos-delay="200">
+                            <div class="workflow-step-icon">
+                                <i class="fas fa-brain"></i>
+                                <div class="workflow-pulse"></div>
+                                <div class="workflow-step-number">2</div>
+                            </div>
+                            <div class="workflow-step-content">
+                                <h3>AI Processing</h3>
+                                <p>7 ML models analyze supplier data simultaneously</p>
+                                <div class="workflow-badge">XGBoost, RF, GB, SVM, NN, AdaBoost, Ensemble</div>
+                                <div class="workflow-details" style="display: none;">
+                                    <div class="workflow-detail-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Ensemble voting for accuracy</span>
+                                    </div>
+                                    <div class="workflow-detail-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Real-time model comparison</span>
+                                    </div>
+                                    <div class="workflow-detail-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>92%+ prediction accuracy</span>
+                                    </div>
+                                </div>
+                                <button class="workflow-learn-more">
+                                    <i class="fas fa-info-circle"></i> Learn More
+                                </button>
+                            </div>
+                            <div class="workflow-connector">
+                                <div class="workflow-line"></div>
+                                <div class="workflow-arrow"><i class="fas fa-arrow-right"></i></div>
+                            </div>
+                        </div>
+
+                        <div class="workflow-step" data-step="3" data-aos="fade-right" data-aos-delay="300">
+                            <div class="workflow-step-icon">
+                                <i class="fas fa-shield-alt"></i>
+                                <div class="workflow-pulse"></div>
+                                <div class="workflow-step-number">3</div>
+                            </div>
+                            <div class="workflow-step-content">
+                                <h3>Risk Assessment</h3>
+                                <p>Multi-dimensional risk profiling & anomaly detection</p>
+                                <div class="workflow-badge">Real-time Analysis</div>
+                                <div class="workflow-details" style="display: none;">
+                                    <div class="workflow-detail-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Geographic risk mapping</span>
+                                    </div>
+                                    <div class="workflow-detail-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Anomaly detection algorithms</span>
+                                    </div>
+                                    <div class="workflow-detail-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>40% risk reduction achieved</span>
+                                    </div>
+                                </div>
+                                <button class="workflow-learn-more">
+                                    <i class="fas fa-info-circle"></i> Learn More
+                                </button>
+                            </div>
+                            <div class="workflow-connector">
+                                <div class="workflow-line"></div>
+                                <div class="workflow-arrow"><i class="fas fa-arrow-right"></i></div>
+                            </div>
+                        </div>
+
+                        <div class="workflow-step" data-step="4" data-aos="fade-right" data-aos-delay="400">
+                            <div class="workflow-step-icon">
+                                <i class="fas fa-file-contract"></i>
+                                <div class="workflow-pulse"></div>
+                                <div class="workflow-step-number">4</div>
+                            </div>
+                            <div class="workflow-step-content">
+                                <h3>Contract Analysis</h3>
+                                <p>NLP-powered contract review with Gemini AI insights</p>
+                                <div class="workflow-badge">BERT, spaCy, Gemini</div>
+                                <div class="workflow-details" style="display: none;">
+                                    <div class="workflow-detail-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Entity extraction & classification</span>
+                                    </div>
+                                    <div class="workflow-detail-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Risk clause identification</span>
+                                    </div>
+                                    <div class="workflow-detail-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>AI-powered recommendations</span>
+                                    </div>
+                                </div>
+                                <button class="workflow-learn-more">
+                                    <i class="fas fa-info-circle"></i> Learn More
+                                </button>
+                            </div>
+                            <div class="workflow-connector">
+                                <div class="workflow-line"></div>
+                                <div class="workflow-arrow"><i class="fas fa-arrow-right"></i></div>
+                            </div>
+                        </div>
+
+                        <div class="workflow-step" data-step="5" data-aos="fade-right" data-aos-delay="500">
+                            <div class="workflow-step-icon">
+                                <i class="fas fa-balance-scale"></i>
+                                <div class="workflow-pulse"></div>
+                                <div class="workflow-step-number">5</div>
+                            </div>
+                            <div class="workflow-step-content">
+                                <h3>Decision Support</h3>
+                                <p>TOPSIS & AHP algorithms for optimal selection</p>
+                                <div class="workflow-badge">Multi-Criteria Analysis</div>
+                                <div class="workflow-details" style="display: none;">
+                                    <div class="workflow-detail-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Customizable weight assignments</span>
+                                    </div>
+                                    <div class="workflow-detail-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Optimal supplier ranking</span>
+                                    </div>
+                                    <div class="workflow-detail-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Scenario-based analysis</span>
+                                    </div>
+                                </div>
+                                <button class="workflow-learn-more">
+                                    <i class="fas fa-info-circle"></i> Learn More
+                                </button>
+                            </div>
+                            <div class="workflow-connector">
+                                <div class="workflow-line"></div>
+                                <div class="workflow-arrow"><i class="fas fa-arrow-right"></i></div>
+                            </div>
+                        </div>
+
+                        <div class="workflow-step" data-step="6" data-aos="fade-right" data-aos-delay="600">
+                            <div class="workflow-step-icon">
+                                <i class="fas fa-check-circle"></i>
+                                <div class="workflow-pulse"></div>
+                                <div class="workflow-step-number">6</div>
+                            </div>
+                            <div class="workflow-step-content">
+                                <h3>Ethics & Compliance</h3>
+                                <p>Explainable AI with SHAP/LIME & bias detection</p>
+                                <div class="workflow-badge">Transparent Decisions</div>
+                                <div class="workflow-details" style="display: none;">
+                                    <div class="workflow-detail-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>SHAP value explanations</span>
+                                    </div>
+                                    <div class="workflow-detail-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Bias detection algorithms</span>
+                                    </div>
+                                    <div class="workflow-detail-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>ESG compliance scoring</span>
+                                    </div>
+                                </div>
+                                <button class="workflow-learn-more">
+                                    <i class="fas fa-info-circle"></i> Learn More
+                                </button>
+                            </div>
+                            <div class="workflow-connector">
+                                <div class="workflow-line"></div>
+                                <div class="workflow-arrow"><i class="fas fa-arrow-right"></i></div>
+                            </div>
+                        </div>
+
+                        <div class="workflow-step workflow-step-final" data-step="7" data-aos="fade-right" data-aos-delay="700">
+                            <div class="workflow-step-icon">
+                                <i class="fas fa-chart-line"></i>
+                                <div class="workflow-pulse"></div>
+                                <div class="workflow-step-number">7</div>
+                            </div>
+                            <div class="workflow-step-content">
+                                <h3>Visualization & Insights</h3>
+                                <p>Interactive dashboards with 3D charts & real-time metrics</p>
+                                <div class="workflow-badge">Executive Dashboard</div>
+                                <div class="workflow-details" style="display: none;">
+                                    <div class="workflow-detail-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>3D interactive visualizations</span>
+                                    </div>
+                                    <div class="workflow-detail-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Real-time metric updates</span>
+                                    </div>
+                                    <div class="workflow-detail-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Exportable reports & insights</span>
+                                    </div>
+                                </div>
+                                <button class="workflow-learn-more">
+                                    <i class="fas fa-info-circle"></i> Learn More
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Animated Data Flow -->
+                        <div class="workflow-data-flow" id="workflow-data-flow">
+                            <div class="data-particle" data-particle="1"></div>
+                            <div class="data-particle" data-particle="2"></div>
+                            <div class="data-particle" data-particle="3"></div>
+                            <div class="data-particle" data-particle="4"></div>
+                            <div class="data-particle" data-particle="5"></div>
+                        </div>
+                    </div>
+
+                    <!-- Workflow Stats -->
+                    <div class="workflow-stats" data-aos="fade-up" data-aos-delay="800">
+                        <div class="workflow-stat-item">
+                            <div class="workflow-stat-icon"><i class="fas fa-clock"></i></div>
+                            <div class="workflow-stat-value">95%</div>
+                            <div class="workflow-stat-label">Time Saved</div>
+                        </div>
+                        <div class="workflow-stat-item">
+                            <div class="workflow-stat-icon"><i class="fas fa-shield-alt"></i></div>
+                            <div class="workflow-stat-value">40%</div>
+                            <div class="workflow-stat-label">Risk Reduced</div>
+                        </div>
+                        <div class="workflow-stat-item">
+                            <div class="workflow-stat-icon"><i class="fas fa-dollar-sign"></i></div>
+                            <div class="workflow-stat-value">20%</div>
+                            <div class="workflow-stat-label">Cost Optimized</div>
+                        </div>
+                        <div class="workflow-stat-item">
+                            <div class="workflow-stat-icon"><i class="fas fa-check-double"></i></div>
+                            <div class="workflow-stat-value">99%</div>
+                            <div class="workflow-stat-label">Accuracy</div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -270,29 +552,6 @@ window.HomePage = {
                     </div>
                 </div>
             </section>
-
-            <!-- Performance Chart Section -->
-            <section style="background: var(--corp-gray-50); padding: 6rem 2rem;" data-aos="fade-up">
-                <div class="container" style="max-width: 1400px; margin: 0 auto;">
-                    <h2 class="text-center mb-5" style="font-size: 2.5rem; font-weight: 700;" data-aos="fade-up">
-                        System Performance
-                    </h2>
-                    <div class="row">
-                        <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
-                            <div class="card" style="border-radius: var(--radius-2xl); padding: 2rem;">
-                                <h4 class="mb-3">Model Accuracy Comparison</h4>
-                                <div id="model-accuracy-chart" class="chart-container" style="height: 400px;"></div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
-                            <div class="card" style="border-radius: var(--radius-2xl); padding: 2rem;">
-                                <h4 class="mb-3">Feature Importance</h4>
-                                <div id="feature-importance-chart-landing" class="chart-container" style="height: 400px;"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
         `;
     },
 
@@ -353,54 +612,118 @@ window.HomePage = {
         }
     },
 
-    async loadCharts() {
-        // Model Accuracy Chart
+    setupWorkflow() {
         setTimeout(() => {
-            const accuracyData = [{
-                x: ['XGBoost', 'Random Forest', 'Gradient Boosting', 'SVM', 'Neural Network', 'AdaBoost', 'Ensemble'],
-                y: [0.92, 0.89, 0.91, 0.85, 0.88, 0.87, 0.93],
-                type: 'bar',
-                marker: {
-                    color: ['#0066CC', '#0052A3', '#0066CC', '#3385D6', '#0066CC', '#0052A3', '#00C853'],
-                    line: { color: 'white', width: 2 }
-                }
-            }];
-            const accuracyLayout = {
-                title: {
-                    text: 'Model R² Scores',
-                    font: { size: 18, color: '#1A1A2E' }
-                },
-                xaxis: { title: 'Model', gridcolor: '#E9ECEF' },
-                yaxis: { title: 'R² Score', range: [0.8, 1.0], gridcolor: '#E9ECEF' },
-                paper_bgcolor: 'transparent',
-                plot_bgcolor: 'transparent',
-                font: { family: 'Inter, sans-serif', color: '#495057' }
-            };
-            Plotly.newPlot('model-accuracy-chart', accuracyData, accuracyLayout, {responsive: true});
+            const container = document.getElementById('workflow-container');
+            if (!container) {
+                console.warn('Workflow container not found');
+                return;
+            }
 
-            // Feature Importance Chart
-            const featureData = [{
-                x: [0.25, 0.20, 0.18, 0.15, 0.12, 0.10],
-                y: ['Quality Score', 'Cost Efficiency', 'Delivery Rate', 'Financial Health', 'ESG Score', 'Risk Score'],
-                type: 'bar',
-                orientation: 'h',
-                marker: {
-                    color: '#0066CC',
-                    line: { color: 'white', width: 2 }
+            const steps = container.querySelectorAll('.workflow-step');
+            const dataFlow = document.getElementById('workflow-data-flow');
+            
+            if (!steps.length || !dataFlow) return;
+
+            // Animate steps sequentially on load
+            steps.forEach((step, index) => {
+                setTimeout(() => {
+                    step.classList.add('workflow-active', 'workflow-step-highlight');
+                    
+                    // Animate connector
+                    const connector = step.querySelector('.workflow-connector');
+                    if (connector) {
+                        setTimeout(() => {
+                            connector.classList.add('workflow-connector-active');
+                        }, 300);
+                    }
+
+                    // Remove highlight after animation
+                    setTimeout(() => {
+                        step.classList.remove('workflow-step-highlight');
+                    }, 1000);
+                }, index * 400);
+            });
+
+            // Animate data particles flowing through workflow
+            const particles = dataFlow.querySelectorAll('.data-particle');
+            particles.forEach((particle, index) => {
+                setTimeout(() => {
+                    particle.style.animation = `flowThroughWorkflow ${8 + index * 0.5}s ease-in-out infinite`;
+                    particle.style.animationDelay = `${index * 1.5}s`;
+                }, 2000);
+            });
+
+            // Click to expand details
+            steps.forEach(step => {
+                const learnMoreBtn = step.querySelector('.workflow-learn-more');
+                const details = step.querySelector('.workflow-details');
+                
+                if (learnMoreBtn && details) {
+                    learnMoreBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const isExpanded = details.style.display !== 'none';
+                        if (isExpanded) {
+                            details.style.display = 'none';
+                            this.innerHTML = '<i class="fas fa-info-circle"></i> Learn More';
+                            step.classList.remove('workflow-step-expanded');
+                        } else {
+                            details.style.display = 'block';
+                            this.innerHTML = '<i class="fas fa-times"></i> Close';
+                            step.classList.add('workflow-step-expanded');
+                            
+                            // Close other expanded steps
+                            steps.forEach(s => {
+                                if (s !== step) {
+                                    const d = s.querySelector('.workflow-details');
+                                    const b = s.querySelector('.workflow-learn-more');
+                                    if (d && b) {
+                                        d.style.display = 'none';
+                                        b.innerHTML = '<i class="fas fa-info-circle"></i> Learn More';
+                                        s.classList.remove('workflow-step-expanded');
+                                    }
+                                }
+                            });
+                        }
+                    });
                 }
-            }];
-            const featureLayout = {
-                title: {
-                    text: 'Top Feature Importances',
-                    font: { size: 18, color: '#1A1A2E' }
-                },
-                xaxis: { title: 'Importance', gridcolor: '#E9ECEF' },
-                yaxis: { title: 'Feature', gridcolor: '#E9ECEF' },
-                paper_bgcolor: 'transparent',
-                plot_bgcolor: 'transparent',
-                font: { family: 'Inter, sans-serif', color: '#495057' }
-            };
-            Plotly.newPlot('feature-importance-chart-landing', featureData, featureLayout, {responsive: true});
-        }, 1000);
+
+                // Enhanced hover interactions
+                step.addEventListener('mouseenter', function() {
+                    this.classList.add('workflow-step-hover');
+                    const icon = this.querySelector('.workflow-step-icon');
+                    if (icon) {
+                        icon.style.transform = 'scale(1.15) rotate(5deg)';
+                    }
+                });
+
+                step.addEventListener('mouseleave', function() {
+                    this.classList.remove('workflow-step-hover');
+                    const icon = this.querySelector('.workflow-step-icon');
+                    if (icon) {
+                        icon.style.transform = '';
+                    }
+                });
+
+                // Click to highlight
+                step.addEventListener('click', function() {
+                    steps.forEach(s => s.classList.remove('workflow-step-clicked'));
+                    this.classList.add('workflow-step-clicked');
+                    setTimeout(() => {
+                        this.classList.remove('workflow-step-clicked');
+                    }, 2000);
+                });
+            });
+
+            // Continuous pulse animation for active step
+            let currentStep = 0;
+            setInterval(() => {
+                steps.forEach(step => step.classList.remove('workflow-step-pulse'));
+                if (steps[currentStep]) {
+                    steps[currentStep].classList.add('workflow-step-pulse');
+                }
+                currentStep = (currentStep + 1) % steps.length;
+            }, 3000);
+        }, 500);
     }
 };
