@@ -163,14 +163,18 @@ class SupplyChainIntegrationService:
             MCDA analysis results with rankings
         """
         # Create criteria
+        from mcda.criteria.criteria_manager import CriterionType, CriterionScale
+        
         criteria_list = []
         for crit_def in criteria:
+            crit_type = crit_def.get('type', 'benefit')
             criterion = Criterion(
-                criterion_id=crit_def['id'],
+                id=crit_def['id'],
                 name=crit_def['name'],
-                weight=weights.get(crit_def['id'], crit_def.get('weight', 1.0)) if weights else crit_def.get('weight', 1.0),
-                criterion_type=crit_def.get('type', 'benefit'),
-                scale_type=crit_def.get('scale', 'ratio')
+                description=crit_def.get('description', crit_def['name']),
+                type=CriterionType.BENEFIT if crit_type == 'benefit' else CriterionType.COST,
+                scale=CriterionScale.RATIO,  # Default to ratio scale
+                weight=weights.get(crit_def['id'], crit_def.get('weight', 1.0)) if weights else crit_def.get('weight', 1.0)
             )
             criteria_list.append(criterion)
         
@@ -187,7 +191,7 @@ class SupplyChainIntegrationService:
             alternatives.append(alt)
         
         # Build matrix
-        criterion_ids = [c.criterion_id for c in criteria_list]
+        criterion_ids = [c.id for c in criteria_list]
         matrix_data = np.array([
             [suppliers_data[sid].get(cid, 0) for cid in criterion_ids]
             for sid in suppliers_data.keys()
@@ -198,7 +202,7 @@ class SupplyChainIntegrationService:
             results = self.topsis.rank(
                 matrix_data,
                 [c.weight for c in criteria_list],
-                [c.criterion_type == 'benefit' for c in criteria_list]
+                [c.type == CriterionType.BENEFIT for c in criteria_list]
             )
             
             rankings = []
@@ -212,7 +216,7 @@ class SupplyChainIntegrationService:
             return {
                 'method': 'TOPSIS',
                 'rankings': sorted(rankings, key=lambda x: x['rank']),
-                'criteria_weights': {c.criterion_id: c.weight for c in criteria_list}
+                'criteria_weights': {c.id: c.weight for c in criteria_list}
             }
         
         elif method.lower() == 'ahp':
@@ -228,7 +232,7 @@ class SupplyChainIntegrationService:
             ahp_results = self.ahp.evaluate_alternatives(
                 matrix_data,
                 criterion_weights,
-                [c.criterion_type == 'benefit' for c in criteria_list]
+                [c.type == CriterionType.BENEFIT for c in criteria_list]
             )
             
             rankings = []
@@ -243,14 +247,14 @@ class SupplyChainIntegrationService:
                 'method': 'AHP',
                 'rankings': sorted(rankings, key=lambda x: x['rank']),
                 'consistency_ratio': float(results['consistency_ratio']),
-                'criteria_weights': {c.criterion_id: float(w) for c, w in zip(criteria_list, criterion_weights)}
+                'criteria_weights': {c.id: float(w) for c, w in zip(criteria_list, criterion_weights)}
             }
         
         elif method.lower() == 'electre':
             results = self.electre.rank(
                 matrix_data,
                 [c.weight for c in criteria_list],
-                [c.criterion_type == 'benefit' for c in criteria_list]
+                [c.type == CriterionType.BENEFIT for c in criteria_list]
             )
             
             rankings = []
@@ -265,7 +269,7 @@ class SupplyChainIntegrationService:
             return {
                 'method': 'ELECTRE',
                 'rankings': sorted(rankings, key=lambda x: x['rank']),
-                'criteria_weights': {c.criterion_id: c.weight for c in criteria_list},
+                'criteria_weights': {c.id: c.weight for c in criteria_list},
                 'kernel_suppliers': [r['supplier_id'] for r in rankings if r['is_in_kernel']]
             }
         
