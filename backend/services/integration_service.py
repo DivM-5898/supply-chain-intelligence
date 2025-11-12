@@ -178,7 +178,13 @@ class SupplyChainIntegrationService:
             )
             criteria_list.append(criterion)
         
-        self.criteria_manager.add_criteria(criteria_list)
+        # Add criteria to manager (use add_criterion for each)
+        for criterion in criteria_list:
+            if criterion.id not in self.criteria_manager.criteria:
+                self.criteria_manager.add_criterion(criterion, auto_normalize_weights=False)
+        
+        # Normalize weights once after all are added
+        self.criteria_manager.normalize_weights()
         
         # Create decision matrix
         alternatives = []
@@ -199,23 +205,33 @@ class SupplyChainIntegrationService:
         
         # Apply selected MCDA method
         if method.lower() == 'topsis':
-            results = self.topsis.rank(
-                matrix_data,
-                [c.weight for c in criteria_list],
-                [c.type == CriterionType.BENEFIT for c in criteria_list]
+            # Convert criteria types
+            from mcda.algorithms.topsis import CriteriaType as TOPSISCriteriaType
+            topsis_criteria_types = [
+                TOPSISCriteriaType.BENEFIT if c.type == CriterionType.BENEFIT else TOPSISCriteriaType.COST
+                for c in criteria_list
+            ]
+            
+            # Run TOPSIS
+            result = self.topsis.run_topsis(
+                decision_matrix=matrix_data,
+                weights=np.array([c.weight for c in criteria_list]),
+                criteria_types=topsis_criteria_types
             )
             
+            # Extract rankings
             rankings = []
-            for idx, (supplier_id, alt) in enumerate(zip(suppliers_data.keys(), alternatives)):
+            supplier_ids_list = list(suppliers_data.keys())
+            for rank, (alt_idx, score) in enumerate(result.ranking, 1):
                 rankings.append({
-                    'supplier_id': supplier_id,
-                    'score': float(results['closeness_coefficient'][idx]),
-                    'rank': int(results['ranking'][idx])
+                    'supplier_id': supplier_ids_list[alt_idx],
+                    'score': float(score),
+                    'rank': rank
                 })
             
             return {
                 'method': 'TOPSIS',
-                'rankings': sorted(rankings, key=lambda x: x['rank']),
+                'rankings': rankings,
                 'criteria_weights': {c.id: c.weight for c in criteria_list}
             }
         
