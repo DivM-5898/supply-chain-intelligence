@@ -21,7 +21,8 @@ from api.routes import (
     transparency,
     gemini,
     ensemble_stacking,
-    websocket as websocket_routes
+    websocket as websocket_routes,
+    integrated_decision
 )
 
 # Optional routes - import only if available
@@ -56,6 +57,7 @@ if CONVERSATIONAL_AI_AVAILABLE and conversational_ai:
     app.include_router(conversational_ai.router, prefix="/api/v1/ai", tags=["Conversational AI"])
 app.include_router(ensemble_stacking.router, prefix="/api/v1/stacking", tags=["Ensemble Stacking"])
 app.include_router(websocket_routes.router, prefix="/api/v1", tags=["WebSocket"])
+app.include_router(integrated_decision.router, prefix="/api/v1/integrated", tags=["Integrated Decision Support"])
 
 
 @app.get("/")
