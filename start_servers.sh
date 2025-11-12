@@ -20,6 +20,26 @@ if [ ! -d "venv" ]; then
     pip install -r backend/requirements.txt
     echo "✅ Dependencies installed"
     echo ""
+    
+    # Download spaCy language model
+    echo "📥 Downloading spaCy language model..."
+    python -m spacy download en_core_web_sm
+    echo "✅ spaCy model downloaded"
+    echo ""
+fi
+
+# Activate virtual environment
+source venv/bin/activate
+
+# Check if models exist, if not train them
+if [ ! -f "backend/models/saved_models/xgb_supplier_scoring.pkl" ]; then
+    echo "📊 Models not found. Training models..."
+    echo "This may take a few minutes..."
+    cd backend
+    python train_models.py
+    cd ..
+    echo "✅ Models trained and saved"
+    echo ""
 fi
 
 # Kill any existing processes on ports 8000 and 8080
