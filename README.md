@@ -170,9 +170,24 @@ python test_integration.py
 
 ### Running the Application
 
+**Option 1 - Automated Startup (Recommended):**
+```bash
+# Start both servers automatically
+./start_servers.sh
+
+# Test connection
+./test_connection.sh
+
+# Stop servers when done
+./stop_servers.sh
+```
+
+**Option 2 - Manual Startup:**
+
 **Terminal 1 - Backend Server:**
 ```bash
 cd backend
+source ../venv/bin/activate
 uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
@@ -187,6 +202,8 @@ python server.py
 - 🔧 Backend API: http://localhost:8000
 - 📚 API Docs: http://localhost:8000/docs
 - ✅ Health Check: http://localhost:8000/api/v1/integrated/health
+
+**📖 Detailed Connection Guide**: See [FRONTEND_BACKEND_CONNECTION.md](FRONTEND_BACKEND_CONNECTION.md)
 
 ---
 
