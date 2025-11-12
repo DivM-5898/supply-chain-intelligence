@@ -186,7 +186,39 @@ class RiskPredictionService:
         suppliers_df = data_loader.load_suppliers()
         _, self.feature_columns = preprocessor.prepare_supplier_features(suppliers_df)
     
-    def predict_risk(self, supplier_ids: List[str]) -> pd.DataFrame:
+    def _add_missing_columns(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Add missing columns with default values for uploaded CSV files"""
+        df = df.copy()
+        
+        # Define default values for required columns
+        default_values = {
+            'on_time_delivery_rate': 0.8,
+            'quality_score': 0.8,
+            'defect_rate': 0.05,
+            'credit_score': 650,
+            'debt_to_equity': 0.5,
+            'profit_margin': 0.1,
+            'years_in_business': 10,
+            'utilization_rate': 0.75,
+            'has_erp_system': False,
+            'certifications': 'None',
+            'avg_delivery_time_days': 7,
+            'geopolitical_risk_score': 0.5,
+            'esg_score': 0.7,
+            'compliance_score': 0.8,
+            'unit_cost': 100,
+            'total_orders': 100,
+            'total_revenue': 10000
+        }
+        
+        # Add missing columns with default values
+        for col, default_val in default_values.items():
+            if col not in df.columns:
+                df[col] = default_val
+        
+        return df
+    
+    def predict_risk(self, supplier_ids: Optional[List[str]] = None, suppliers_df: Optional[pd.DataFrame] = None) -> pd.DataFrame:
         """
         Predict risk probability for suppliers
         Returns DataFrame with risk predictions
@@ -194,17 +226,42 @@ class RiskPredictionService:
         if not self.logistic_model:
             self.load_models()
         
-        suppliers_df = data_loader.load_suppliers()
-        risk_events_df = data_loader.load_risk_events()
+        # Use uploaded suppliers_df if provided, otherwise load from data_loader
+        if suppliers_df is not None:
+            # Add missing columns with default values
+            suppliers_df = self._add_missing_columns(suppliers_df)
+            # Use uploaded data directly
+            risk_events_df = data_loader.load_risk_events()
+            df = preprocessor.create_risk_features(suppliers_df, risk_events_df)
+            df, _ = preprocessor.prepare_supplier_features(df)
+        else:
+            # Use default data loader
+            suppliers_df = data_loader.load_suppliers()
+            risk_events_df = data_loader.load_risk_events()
+            df = preprocessor.create_risk_features(suppliers_df, risk_events_df)
+            df, _ = preprocessor.prepare_supplier_features(df)
         
-        df = preprocessor.create_risk_features(suppliers_df, risk_events_df)
-        df, _ = preprocessor.prepare_supplier_features(df)
-        
-        # Filter to requested suppliers
+        # Filter to requested suppliers if specified
         if supplier_ids:
             df = df[df['supplier_id'].isin(supplier_ids)]
         
+        # Check if we have any data
+        if df.empty:
+            raise ValueError("No suppliers found matching the criteria or uploaded data is empty")
+        
+        # Ensure all required feature columns exist
+        missing_cols = set(self.feature_columns) - set(df.columns)
+        if missing_cols:
+            # Add missing columns with default values
+            for col in missing_cols:
+                df[col] = 0
+        
         X = df[self.feature_columns].fillna(0)
+        
+        # Check if X is empty
+        if X.empty or len(X) == 0:
+            raise ValueError("No valid data to predict. Please ensure your CSV contains required columns.")
+        
         X_scaled = self.scaler.transform(X)
         
         # Predict risk probability
@@ -222,30 +279,87 @@ class RiskPredictionService:
         
         return results.sort_values('risk_probability', ascending=False)
     
-    def detect_anomalies(self, supplier_ids: Optional[List[str]] = None) -> pd.DataFrame:
+    def detect_anomalies(self, supplier_ids: Optional[List[str]] = None, suppliers_df: Optional[pd.DataFrame] = None) -> pd.DataFrame:
         """
-        Detect anomalous suppliers using Isolation Forest
+        Detect anomalous suppliers using Isolation Forest and identify anomaly reasons
         """
         if not self.anomaly_detector:
             self.load_models()
         
-        suppliers_df = data_loader.load_suppliers()
+        if suppliers_df is None:
+            suppliers_df = data_loader.load_suppliers()
+        
+        # Add missing columns with default values for uploaded CSV
+        suppliers_df = self._add_missing_columns(suppliers_df)
+        
         df, _ = preprocessor.prepare_supplier_features(suppliers_df)
         
         if supplier_ids:
             df = df[df['supplier_id'].isin(supplier_ids)]
         
+        # Check if we have any data
+        if df.empty:
+            raise ValueError("No suppliers found matching the criteria or uploaded data is empty")
+        
+        # Ensure all required feature columns exist
+        missing_cols = set(self.feature_columns) - set(df.columns)
+        if missing_cols:
+            # Add missing columns with default values
+            for col in missing_cols:
+                df[col] = 0
+        
         X = df[self.feature_columns].fillna(0)
+        
+        # Check if X is empty
+        if X.empty or len(X) == 0:
+            raise ValueError("No valid data to analyze. Please ensure your CSV contains required columns.")
+        
         X_scaled = self.scaler.transform(X)
         
         # Detect anomalies
         anomalies = self.anomaly_detector.predict(X_scaled)
         anomaly_scores = self.anomaly_detector.score_samples(X_scaled)
         
+        # Identify which features contribute to anomalies
+        anomaly_reasons = []
+        for idx, (is_anom, score) in enumerate(zip(anomalies == -1, anomaly_scores)):
+            if is_anom:
+                # Get feature values for this supplier
+                supplier_features = X.iloc[idx]
+                # Calculate deviations from mean
+                feature_deviations = {}
+                for col in self.feature_columns:
+                    mean_val = X[col].mean()
+                    std_val = X[col].std()
+                    if std_val > 0:
+                        z_score = abs((supplier_features[col] - mean_val) / std_val)
+                        if z_score > 2:  # Significant deviation
+                            feature_deviations[col] = {
+                                'value': supplier_features[col],
+                                'mean': mean_val,
+                                'z_score': z_score,
+                                'deviation': 'high' if supplier_features[col] > mean_val else 'low'
+                            }
+                
+                # Sort by z-score and get top 3 anomalies
+                top_anomalies = sorted(feature_deviations.items(), key=lambda x: x[1]['z_score'], reverse=True)[:3]
+                reasons = []
+                for feat_name, feat_info in top_anomalies:
+                    readable_name = feat_name.replace('_', ' ').title()
+                    if feat_info['deviation'] == 'high':
+                        reasons.append(f"{readable_name} is unusually high ({feat_info['value']:.2f} vs avg {feat_info['mean']:.2f})")
+                    else:
+                        reasons.append(f"{readable_name} is unusually low ({feat_info['value']:.2f} vs avg {feat_info['mean']:.2f})")
+                
+                anomaly_reasons.append('; '.join(reasons) if reasons else 'Multiple feature deviations detected')
+            else:
+                anomaly_reasons.append('')
+        
         results = pd.DataFrame({
             'supplier_id': df['supplier_id'].values,
             'is_anomaly': (anomalies == -1),
             'anomaly_score': anomaly_scores,
+            'anomaly_reason': anomaly_reasons,
             'severity': pd.cut(-anomaly_scores,
                               bins=[-np.inf, -0.5, -0.3, np.inf],
                               labels=['High', 'Medium', 'Low'])

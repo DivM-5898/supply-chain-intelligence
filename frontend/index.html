@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="assets/css/corporate.css">
     <link rel="stylesheet" href="assets/css/landing.css">
     <link rel="stylesheet" href="assets/css/landing-fix.css">
+    <link rel="stylesheet" href="assets/css/navigation-loader.css">
 </head>
 <body>
     <!-- Sidebar Navigation -->
@@ -113,6 +114,7 @@
         <!-- Custom JavaScript -->
     <script src="assets/js/utils.js"></script>
     <script src="assets/js/api.js"></script>
+    <script src="assets/js/visualization-enhancer.js"></script>
     <script src="assets/js/api-init-check.js"></script>
     <script src="assets/js/api-helper.js"></script>
     <script src="assets/js/pages/home.js"></script>
@@ -151,7 +153,9 @@
                     exists: !!homePage,
                     hasActive: homePage ? homePage.classList.contains('active') : false,
                     innerHTMLLength: homePage ? homePage.innerHTML.length : 0,
-                    display: homePage ? window.getComputedStyle(homePage).display : 'N/A'
+                    display: homePage ? window.getComputedStyle(homePage).display : 'N/A',
+                    HomePageAvailable: typeof window.HomePage !== 'undefined',
+                    appAvailable: typeof window.app !== 'undefined'
                 });
                 
                 if (homePage) {
@@ -184,27 +188,55 @@
                         contentContainer.style.maxWidth = '100%';
                     }
                     
-                    // If empty, try to load content
-                    if (homePage.innerHTML.trim() === '' || homePage.innerHTML.trim() === '<!-- Content will be loaded here -->') {
-                        console.warn('Home page is empty, attempting to load...');
+                    // Check if page is still showing loading message or is empty
+                    const isStillLoading = homePage.innerHTML.includes('Loading landing page') || 
+                                          homePage.innerHTML.trim() === '' || 
+                                          homePage.innerHTML.trim() === '<!-- Content will be loaded here -->';
+                    
+                    if (isStillLoading) {
+                        console.warn('Home page is still loading or empty, attempting to load...');
+                        
+                        // Try multiple initialization methods
+                        let loaded = false;
+                        
+                        // Method 1: Direct HomePage.init()
                         if (window.HomePage && typeof window.HomePage.init === 'function') {
                             console.log('Calling HomePage.init()...');
-                            window.HomePage.init().catch(function(err) {
+                            window.HomePage.init().then(function() {
+                                console.log('HomePage.init() completed');
+                                loaded = true;
+                            }).catch(function(err) {
                                 console.error('Error in HomePage.init():', err);
                             });
-                        } else if (window.app && typeof window.app.navigateToPage === 'function') {
-                            console.log('Calling app.navigateToPage("home")...');
-                            window.app.navigateToPage('home');
-                        } else {
-                            console.error('Neither HomePage.init() nor app.navigateToPage() available');
-                            // Last resort: render basic content
-                            homePage.innerHTML = '<div style="padding: 50px; text-align: center;"><h1>AI Supplier Selection & Risk Management</h1><p>Loading dashboard...</p></div>';
                         }
+                        
+                        // Method 2: Use app.navigateToPage
+                        if (!loaded && window.app && typeof window.app.navigateToPage === 'function') {
+                            console.log('Calling app.navigateToPage("home")...');
+                            try {
+                                window.app.navigateToPage('home');
+                                loaded = true;
+                            } catch (err) {
+                                console.error('Error in app.navigateToPage():', err);
+                            }
+                        }
+                        
+                        // Method 3: Last resort - render basic content
+                        if (!loaded) {
+                            console.error('All initialization methods failed, rendering fallback content');
+                            setTimeout(function() {
+                                if (homePage.innerHTML.includes('Loading landing page') || homePage.innerHTML.trim() === '') {
+                                    homePage.innerHTML = '<div style="padding: 50px; text-align: center;"><h1>AI Supplier Selection & Risk Management</h1><p>Please refresh the page if content does not load.</p><button onclick="location.reload()" style="padding: 10px 20px; margin-top: 20px; cursor: pointer;">Refresh Page</button></div>';
+                                }
+                            }, 2000);
+                        }
+                    } else {
+                        console.log('Home page content already loaded');
                     }
                 } else {
                     console.error('Home page element not found!');
                 }
-            }, 500);
+            }, 1000); // Increased timeout to allow scripts to load
         });
     </script>
 </body>

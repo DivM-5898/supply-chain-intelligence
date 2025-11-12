@@ -38,6 +38,47 @@ class ReportRequest(BaseModel):
     report_type: Optional[str] = "comprehensive"
 
 
+class RankingRationaleRequest(BaseModel):
+    csv_data: str
+    model_type: str
+    results: List[Dict]
+    file_name: Optional[str] = None
+
+
+class ChatRankingsRequest(BaseModel):
+    message: str
+    csv_data: str
+    model_type: str
+    results: List[Dict]
+
+
+class RiskAnalysisRationaleRequest(BaseModel):
+    csv_data: str
+    risk_results: List[Dict]
+    anomaly_results: List[Dict]
+    file_name: Optional[str] = None
+
+
+class ChatRisksRequest(BaseModel):
+    message: str
+    csv_data: str
+    risk_results: List[Dict]
+    anomaly_results: List[Dict]
+
+
+class ContractAnalysisRationaleRequest(BaseModel):
+    contract_text: str
+    analysis_results: Dict
+    file_name: Optional[str] = None
+    input_method: Optional[str] = None
+
+
+class ChatContractRequest(BaseModel):
+    message: str
+    contract_text: str
+    analysis_results: Dict
+
+
 class QueryRequest(BaseModel):
     query: str
     context_data: Optional[Dict] = None
@@ -106,6 +147,221 @@ async def generate_supplier_report(request: ReportRequest):
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/ranking-rationale")
+async def get_ranking_rationale(request: RankingRationaleRequest):
+    """Get AI-powered explanation for supplier rankings"""
+    try:
+        result = gemini_service.explain_ranking_rationale(
+            request.csv_data,
+            request.model_type,
+            request.results,
+            request.file_name
+        )
+        
+        if not result.get('success'):
+            error_type = result.get('error_type', 'general_error')
+            retry_after = result.get('retry_after')
+            
+            if error_type == 'quota_exceeded':
+                raise HTTPException(
+                    status_code=429,
+                    detail={
+                        "error": result.get('error', 'Quota exceeded'),
+                        "error_type": "quota_exceeded",
+                        "retry_after": retry_after,
+                        "message": f"API quota exceeded. Please wait {retry_after} seconds before trying again."
+                    }
+                )
+            else:
+                raise HTTPException(status_code=500, detail=result.get('error', 'Analysis failed'))
+        
+        return result
+    except HTTPException:
+        raise
+    except Exception as e:
+        import traceback
+        raise HTTPException(status_code=500, detail=f"Error generating rationale: {str(e)}")
+
+
+@router.post("/chat-rankings")
+async def chat_about_rankings(request: ChatRankingsRequest):
+    """Chat about rankings with AI assistant"""
+    try:
+        result = gemini_service.chat_about_rankings(
+            request.message,
+            request.csv_data,
+            request.model_type,
+            request.results
+        )
+        
+        if not result.get('success'):
+            error_type = result.get('error_type', 'general_error')
+            retry_after = result.get('retry_after')
+            
+            if error_type == 'quota_exceeded':
+                raise HTTPException(
+                    status_code=429,
+                    detail={
+                        "error": result.get('error', 'Quota exceeded'),
+                        "error_type": "quota_exceeded",
+                        "retry_after": retry_after,
+                        "message": f"API quota exceeded. Please wait {retry_after} seconds before trying again."
+                    }
+                )
+            else:
+                raise HTTPException(status_code=500, detail=result.get('error', 'Chat failed'))
+        
+        return result
+    except HTTPException:
+        raise
+    except Exception as e:
+        import traceback
+        raise HTTPException(status_code=500, detail=f"Error in chat: {str(e)}")
+
+
+@router.post("/risk-analysis-rationale")
+async def get_risk_analysis_rationale(request: RiskAnalysisRationaleRequest):
+    """Get AI-powered explanation for risk analysis and anomaly detection"""
+    try:
+        result = gemini_service.explain_risk_analysis(
+            request.csv_data,
+            request.risk_results,
+            request.anomaly_results,
+            request.file_name
+        )
+        
+        if not result.get('success'):
+            error_type = result.get('error_type', 'general_error')
+            retry_after = result.get('retry_after')
+            
+            if error_type == 'quota_exceeded':
+                raise HTTPException(
+                    status_code=429,
+                    detail={
+                        "error": result.get('error', 'Quota exceeded'),
+                        "error_type": "quota_exceeded",
+                        "retry_after": retry_after,
+                        "message": f"API quota exceeded. Please wait {retry_after} seconds before trying again."
+                    }
+                )
+            else:
+                raise HTTPException(status_code=500, detail=result.get('error', 'Analysis failed'))
+        
+        return result
+    except HTTPException:
+        raise
+    except Exception as e:
+        import traceback
+        raise HTTPException(status_code=500, detail=f"Error generating rationale: {str(e)}")
+
+
+@router.post("/chat-risks")
+async def chat_about_risks(request: ChatRisksRequest):
+    """Chat about risks and anomalies with AI assistant"""
+    try:
+        result = gemini_service.chat_about_risks(
+            request.message,
+            request.csv_data,
+            request.risk_results,
+            request.anomaly_results
+        )
+        
+        if not result.get('success'):
+            error_type = result.get('error_type', 'general_error')
+            retry_after = result.get('retry_after')
+            
+            if error_type == 'quota_exceeded':
+                raise HTTPException(
+                    status_code=429,
+                    detail={
+                        "error": result.get('error', 'Quota exceeded'),
+                        "error_type": "quota_exceeded",
+                        "retry_after": retry_after,
+                        "message": f"API quota exceeded. Please wait {retry_after} seconds before trying again."
+                    }
+                )
+            else:
+                raise HTTPException(status_code=500, detail=result.get('error', 'Chat failed'))
+        
+        return result
+    except HTTPException:
+        raise
+    except Exception as e:
+        import traceback
+        raise HTTPException(status_code=500, detail=f"Error in chat: {str(e)}")
+
+
+@router.post("/contract-analysis-rationale")
+async def get_contract_analysis_rationale(request: ContractAnalysisRationaleRequest):
+    """Get AI-powered explanation for contract analysis results"""
+    try:
+        result = gemini_service.explain_contract_analysis(
+            request.contract_text,
+            request.analysis_results,
+            request.file_name,
+            request.input_method
+        )
+        
+        if not result.get('success'):
+            error_type = result.get('error_type', 'general_error')
+            retry_after = result.get('retry_after')
+            
+            if error_type == 'quota_exceeded':
+                raise HTTPException(
+                    status_code=429,
+                    detail={
+                        "error": result.get('error', 'Quota exceeded'),
+                        "error_type": "quota_exceeded",
+                        "retry_after": retry_after,
+                        "message": f"API quota exceeded. Please wait {retry_after} seconds before trying again."
+                    }
+                )
+            else:
+                raise HTTPException(status_code=500, detail=result.get('error', 'Analysis failed'))
+        
+        return result
+    except HTTPException:
+        raise
+    except Exception as e:
+        import traceback
+        raise HTTPException(status_code=500, detail=f"Error generating rationale: {str(e)}")
+
+
+@router.post("/chat-contract")
+async def chat_about_contract(request: ChatContractRequest):
+    """Chat about contract analysis with AI assistant"""
+    try:
+        result = gemini_service.chat_about_contract(
+            request.message,
+            request.contract_text,
+            request.analysis_results
+        )
+        
+        if not result.get('success'):
+            error_type = result.get('error_type', 'general_error')
+            retry_after = result.get('retry_after')
+            
+            if error_type == 'quota_exceeded':
+                raise HTTPException(
+                    status_code=429,
+                    detail={
+                        "error": result.get('error', 'Quota exceeded'),
+                        "error_type": "quota_exceeded",
+                        "retry_after": retry_after,
+                        "message": f"API quota exceeded. Please wait {retry_after} seconds before trying again."
+                    }
+                )
+            else:
+                raise HTTPException(status_code=500, detail=result.get('error', 'Chat failed'))
+        
+        return result
+    except HTTPException:
+        raise
+    except Exception as e:
+        import traceback
+        raise HTTPException(status_code=500, detail=f"Error in chat: {str(e)}")
 
 
 @router.post("/query")

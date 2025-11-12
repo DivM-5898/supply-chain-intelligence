@@ -4,7 +4,11 @@ window.SupplierEvaluationPage = {
         const container = document.getElementById('page-supplier-evaluation');
         container.innerHTML = this.getHTML();
         this.setupEventListeners();
-        this.loadAvailableModels();
+        
+        // Load models asynchronously after page renders to reduce initial latency
+        setTimeout(() => {
+            this.loadAvailableModels();
+        }, 100);
         
         // Refresh AOS after content loads
         if (typeof AOS !== 'undefined') {
@@ -64,6 +68,52 @@ window.SupplierEvaluationPage = {
                 </div>
             </div>
 
+            <!-- File Upload Section - MOVED TO TOP -->
+            <div class="card mb-4" data-aos="fade-up" data-aos-delay="200" style="border: 2px solid var(--corp-primary);">
+                <div class="card-header-custom" style="background: var(--gradient-primary); color: white;">
+                    <h3><i class="fas fa-file-upload"></i> 📁 Upload & Evaluate Your CSV/Excel File</h3>
+                </div>
+                <div class="card-body" style="padding: 2rem;">
+                    <div class="alert alert-info mb-3">
+                        <i class="fas fa-info-circle"></i> 
+                        <strong>File Format:</strong> Upload CSV or Excel (.xlsx, .xls) file with supplier data. 
+                        Required columns: supplier_id, on_time_delivery_rate, quality_score, defect_rate, 
+                        credit_score, debt_to_equity, profit_margin, years_in_business, utilization_rate, 
+                        geopolitical_risk_score, esg_score, compliance_score, etc.
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label-custom"><i class="fas fa-file"></i> Select File</label>
+                            <input type="file" id="file-input" class="form-control-custom" accept=".csv,.xlsx,.xls">
+                            <small class="text-muted">Supported formats: CSV, Excel (.xlsx, .xls)</small>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label-custom"><i class="fas fa-robot"></i> Model</label>
+                            <select id="upload-model-type" class="form-control-custom">
+                                <option value="xgboost">XGBoost</option>
+                                <option value="random_forest">Random Forest</option>
+                                <option value="gradient_boosting">Gradient Boosting</option>
+                                <option value="svm">SVM</option>
+                                <option value="neural_network">Neural Network</option>
+                                <option value="adaboost">AdaBoost</option>
+                                <option value="ensemble">Ensemble</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3 d-flex align-items-end">
+                            <button id="upload-evaluate-btn" class="btn-primary-custom w-100" disabled>
+                                <i class="fas fa-upload"></i> Upload & Evaluate
+                            </button>
+                        </div>
+                    </div>
+                    <div id="file-info" class="mt-2" style="display: none;">
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle"></i> 
+                            <span id="file-name-display"></span> selected
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Control Panel -->
             <div class="card mb-4" data-aos="fade-up" data-aos-delay="200">
                 <div class="card-header-custom">
@@ -97,9 +147,6 @@ window.SupplierEvaluationPage = {
                         <div class="col-md-12">
                             <button id="load-models-btn" class="btn-secondary-custom">
                                 <i class="fas fa-sync"></i> Refresh Available Models
-                            </button>
-                            <button id="compare-all-btn" class="btn-secondary-custom ml-2">
-                                <i class="fas fa-balance-scale"></i> Compare All Models
                             </button>
                         </div>
                     </div>
@@ -141,25 +188,45 @@ window.SupplierEvaluationPage = {
                     </div>
                 </div>
 
-                <!-- Model Comparison -->
+                <!-- AI Chatbot for Ranking Rationale -->
                 <div class="card mb-4" data-aos="fade-up" data-aos-delay="600">
                     <div class="card-header-custom">
-                        <h3><i class="fas fa-balance-scale"></i> Model Comparison</h3>
+                        <h3><i class="fas fa-robot"></i> AI Ranking Rationale Assistant</h3>
                     </div>
                     <div class="card-body" style="padding: 2rem;">
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label-custom">Select Models to Compare (comma-separated)</label>
-                                <input type="text" id="compare-models-input" class="form-control-custom" 
-                                       placeholder="xgboost,random_forest,gradient_boosting" 
-                                       value="xgboost,random_forest,gradient_boosting">
+                        <p class="mb-3" style="color: var(--corp-gray-600);">
+                            Get AI-powered explanations for supplier rankings. The assistant analyzes your uploaded data, 
+                            selected model, and results to provide detailed rationale for the rankings.
+                        </p>
+                        <div id="chatbot-container" style="border: 1px solid var(--corp-gray-200); border-radius: 8px; background: white; min-height: 400px; max-height: 600px; display: flex; flex-direction: column;">
+                            <div id="chatbot-messages" style="flex: 1; padding: 1.5rem; overflow-y: auto; max-height: 450px;">
+                                <div class="chat-message bot-message" style="background: var(--corp-gray-50); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                                    <div style="font-weight: 600; color: var(--corp-primary); margin-bottom: 0.5rem;">
+                                        <i class="fas fa-robot"></i> AI Assistant
+                                    </div>
+                                    <div style="color: var(--corp-gray-700);">
+                                        Hello! I'm your AI Ranking Rationale Assistant powered by Gemini 2.5 Flash. 
+                                        Upload a CSV file, select a model, and get rankings to see detailed explanations for why suppliers are ranked the way they are.
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="chatbot-input-container" style="padding: 1rem; border-top: 1px solid var(--corp-gray-200); display: flex; gap: 0.5rem;">
+                                <input type="text" id="chatbot-input" class="form-control-custom" 
+                                       placeholder="Ask about the rankings or click 'Get Ranking Rationale' below..." 
+                                       style="flex: 1;">
+                                <button id="chatbot-send-btn" class="btn-primary-custom" style="white-space: nowrap;">
+                                    <i class="fas fa-paper-plane"></i> Send
+                                </button>
                             </div>
                         </div>
-                        <button id="compare-models-btn" class="btn-secondary-custom mb-3">
-                            <i class="fas fa-balance-scale"></i> Compare Models
-                        </button>
-                        <div id="comparison-chart" class="chart-container-enhanced-large"></div>
-                        <div id="comparison-table" class="table-container-enhanced mt-3"></div>
+                        <div class="mt-3" style="text-align: center;">
+                            <button id="get-rationale-btn" class="btn-primary-custom">
+                                <i class="fas fa-brain"></i> Get Ranking Rationale
+                            </button>
+                            <button id="clear-chat-btn" class="btn-secondary-custom ml-2">
+                                <i class="fas fa-trash"></i> Clear Chat
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -170,8 +237,36 @@ window.SupplierEvaluationPage = {
         document.getElementById('evaluate-btn').addEventListener('click', () => this.evaluateSuppliers());
         document.getElementById('load-models-btn').addEventListener('click', () => this.loadAvailableModels());
         document.getElementById('feature-importance-btn').addEventListener('click', () => this.getFeatureImportance());
-        document.getElementById('compare-models-btn').addEventListener('click', () => this.compareModels());
-        document.getElementById('compare-all-btn').addEventListener('click', () => this.compareAllModels());
+        
+        // File upload handlers
+        const fileInput = document.getElementById('file-input');
+        const uploadBtn = document.getElementById('upload-evaluate-btn');
+        const fileInfo = document.getElementById('file-info');
+        const fileNameDisplay = document.getElementById('file-name-display');
+        
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                uploadBtn.disabled = false;
+                fileNameDisplay.textContent = file.name;
+                fileInfo.style.display = 'block';
+            } else {
+                uploadBtn.disabled = true;
+                fileInfo.style.display = 'none';
+            }
+        });
+        
+        uploadBtn.addEventListener('click', () => this.uploadAndEvaluate());
+        
+        // Chatbot handlers
+        document.getElementById('get-rationale-btn').addEventListener('click', () => this.getRankingRationale());
+        document.getElementById('chatbot-send-btn').addEventListener('click', () => this.sendChatMessage());
+        document.getElementById('chatbot-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                this.sendChatMessage();
+            }
+        });
+        document.getElementById('clear-chat-btn').addEventListener('click', () => this.clearChat());
     },
 
     async loadAvailableModels() {
@@ -212,33 +307,57 @@ window.SupplierEvaluationPage = {
                 }
             }
             
-            window.app.showLoading();
+            // Don't show full page loading, just load silently
             console.log('[SupplierEvaluation] API client found:', window.api);
             const result = await window.api.getAvailableModels();
             
             console.log('[SupplierEvaluation] Models loaded:', result);
             
             if (result.error) {
-                window.app.showError(result.error);
+                console.error('[SupplierEvaluation] Error loading models:', result.error);
+                // Set default models if API fails
+                this.setDefaultModels();
                 return;
             }
             
             const select = document.getElementById('model-type');
+            if (select) {
+                select.innerHTML = '';
+                result.available_models.forEach(model => {
+                    const option = document.createElement('option');
+                    option.value = model;
+                    option.textContent = model.charAt(0).toUpperCase() + model.slice(1).replace(/_/g, ' ');
+                    select.appendChild(option);
+                });
+            }
+            
+            const totalModelsEl = document.getElementById('total-models');
+            if (totalModelsEl) {
+                totalModelsEl.textContent = result.total_models;
+            }
+        } catch (error) {
+            console.error('[SupplierEvaluation] Error loading models:', error);
+            // Set default models on error
+            this.setDefaultModels();
+        }
+    },
+
+    setDefaultModels() {
+        // Set default models if API call fails
+        const select = document.getElementById('model-type');
+        if (select) {
+            const defaultModels = ['xgboost', 'random_forest', 'gradient_boosting', 'svm', 'neural_network', 'adaboost', 'ensemble'];
             select.innerHTML = '';
-            result.available_models.forEach(model => {
+            defaultModels.forEach(model => {
                 const option = document.createElement('option');
                 option.value = model;
                 option.textContent = model.charAt(0).toUpperCase() + model.slice(1).replace(/_/g, ' ');
                 select.appendChild(option);
             });
-            
-            document.getElementById('total-models').textContent = result.total_models;
-            window.app.showSuccess(`Loaded ${result.total_models} available models!`);
-        } catch (error) {
-            console.error('[SupplierEvaluation] Error loading models:', error);
-            window.app.showError('Failed to load models: ' + error.message);
-        } finally {
-            window.app.hideLoading();
+        }
+        const totalModelsEl = document.getElementById('total-models');
+        if (totalModelsEl) {
+            totalModelsEl.textContent = '7';
         }
     },
 
@@ -272,6 +391,60 @@ window.SupplierEvaluationPage = {
             window.app.showSuccess(`Evaluated ${result.total_suppliers} suppliers successfully!`);
         } catch (error) {
             window.app.showError('Failed to evaluate suppliers: ' + error.message);
+        } finally {
+            window.app.hideLoading();
+        }
+    },
+
+    async uploadAndEvaluate() {
+        try {
+            const fileInput = document.getElementById('file-input');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                window.app.showError('Please select a file to upload');
+                return;
+            }
+            
+            const modelType = document.getElementById('upload-model-type').value;
+            const topN = parseInt(document.getElementById('top-n').value) || null;
+            
+            window.app.showLoading();
+            
+            if (!window.api) {
+                throw new Error('API client not available. Please refresh the page.');
+            }
+            
+            console.log('[SupplierEvaluation] Uploading file:', file.name, 'Model:', modelType);
+            
+            const result = await window.api.uploadAndEvaluate(file, modelType, topN);
+            
+            if (result.error) {
+                window.app.showError(result.error);
+                return;
+            }
+            
+            // Store data for chatbot
+            // Read CSV content for chatbot
+            const csvText = await file.text();
+            this.currentEvaluationData = {
+                csvData: csvText,
+                modelType: modelType,
+                results: result.results || [],
+                fileName: file.name
+            };
+            
+            // Display results
+            this.displayResults(result);
+            document.getElementById('total-suppliers').textContent = result.total_suppliers;
+            const avgScore = result.results.reduce((sum, r) => sum + r.predicted_score, 0) / result.results.length;
+            document.getElementById('avg-score').textContent = avgScore.toFixed(2);
+            
+            window.app.showSuccess(result.message || `Successfully evaluated ${result.total_suppliers} suppliers from uploaded file!`);
+            
+        } catch (error) {
+            console.error('[SupplierEvaluation] Error uploading and evaluating:', error);
+            window.app.showError('Failed to upload and evaluate file: ' + error.message);
         } finally {
             window.app.hideLoading();
         }
@@ -388,103 +561,215 @@ window.SupplierEvaluationPage = {
         }
     },
 
-    async compareModels() {
+    // Store current evaluation data for chatbot
+    currentEvaluationData: {
+        csvData: null,
+        modelType: null,
+        results: null,
+        fileName: null
+    },
+
+    async getRankingRationale() {
         try {
-            window.app.showLoading();
-            const modelsInput = document.getElementById('compare-models-input').value;
-            const models = modelsInput.split(',').map(m => m.trim());
-            if (!window.api) {
-                throw new Error('API client not available. Please refresh the page.');
-            }
-            const result = await window.api.compareSupplierModels(null, models.join(','));
-            
-            if (result.error) {
-                window.app.showError(result.error);
+            if (!this.currentEvaluationData.results || !this.currentEvaluationData.modelType) {
+                window.app.showError('Please upload a CSV file and get rankings first before requesting rationale.');
                 return;
             }
 
-            const comparison = result.results || [];
-            const top20 = comparison.slice(0, 20);
+            this.addChatMessage('user', 'Please explain the ranking rationale for these suppliers.');
+            const typingIndicator = this.showTypingIndicator();
+            
+            const result = await window.api.getRankingRationale({
+                csv_data: this.currentEvaluationData.csvData,
+                model_type: this.currentEvaluationData.modelType,
+                results: this.currentEvaluationData.results,
+                file_name: this.currentEvaluationData.fileName
+            });
 
-            // Enhanced 3D scatter plot
-            const scoreCols = Object.keys(comparison[0] || {}).filter(k => k.startsWith('score_'));
-            if (scoreCols.length >= 3) {
-                const chartData = [{
-                    x: top20.map(r => r[scoreCols[0]] || 0),
-                    y: top20.map(r => r[scoreCols[1]] || 0),
-                    z: top20.map(r => r[scoreCols[2]] || 0),
-                    mode: 'markers',
-                    type: 'scatter3d',
-                    marker: {
-                        size: 10,
-                        color: top20.map(r => r.avg_score || 0),
-                        colorscale: 'Blues',
-                        showscale: true,
-                        line: { color: 'white', width: 1 }
-                    },
-                    text: top20.map(r => r.supplier_id)
-                }];
-                const chartLayout = {
-                    title: {
-                        text: '3D Model Comparison',
-                        font: { size: 18, color: '#1A1A2E' }
-                    },
-                    scene: {
-                        xaxis: { title: scoreCols[0].replace('score_', '').replace(/_/g, ' ').toUpperCase() },
-                        yaxis: { title: scoreCols[1].replace('score_', '').replace(/_/g, ' ').toUpperCase() },
-                        zaxis: { title: scoreCols[2].replace('score_', '').replace(/_/g, ' ').toUpperCase() },
-                        bgcolor: '#F8F9FA'
-                    },
-                    height: 600,
-                    paper_bgcolor: 'transparent',
-                    font: { family: 'Inter, sans-serif', color: '#495057' }
-                };
-                Plotly.newPlot('comparison-chart', chartData, chartLayout, {responsive: true});
-            } else {
-                // Enhanced 2D comparison chart
-                const chartData = scoreCols.map(col => ({
-                    x: top20.map(r => r.supplier_id),
-                    y: top20.map(r => r[col] || 0),
-                    name: col.replace('score_', '').replace(/_/g, ' ').toUpperCase(),
-                    type: 'bar'
-                }));
-                Plotly.newPlot('comparison-chart', chartData, {
-                    title: {
-                        text: 'Model Comparison',
-                        font: { size: 18, color: '#1A1A2E' }
-                    },
-                    xaxis: { title: 'Supplier ID', gridcolor: '#E9ECEF' },
-                    yaxis: { title: 'Score', gridcolor: '#E9ECEF' },
-                    barmode: 'group',
-                    height: 500,
-                    paper_bgcolor: 'transparent',
-                    plot_bgcolor: 'transparent',
-                    font: { family: 'Inter, sans-serif', color: '#495057' }
-                }, {responsive: true});
+            this.hideTypingIndicator();
+
+            if (result.error) {
+                this.addChatMessage('bot', `Error: ${result.error}`, true);
+                return;
             }
 
-            // Enhanced comparison table
-            utils.createTable(top20, 'comparison-table', [
-                { key: 'supplier_id', label: 'Supplier ID' },
-                ...scoreCols.map(col => ({
-                    key: col,
-                    label: col.replace('score_', '').replace(/_/g, ' ').toUpperCase(),
-                    format: (v) => utils.formatNumber(v, 3)
-                })),
-                { key: 'avg_score', label: 'Avg Score', format: (v) => `<strong>${utils.formatNumber(v, 3)}</strong>` },
-                { key: 'score_variance', label: 'Variance', format: (v) => utils.formatNumber(v, 4) }
-            ]);
-
-            window.app.showSuccess(`Compared ${result.models_compared.length} models successfully!`);
+            this.addChatMessage('bot', result.rationale || result.response || 'Ranking rationale generated successfully.');
+            window.app.showSuccess('Ranking rationale generated!');
         } catch (error) {
-            window.app.showError('Failed to compare models: ' + error.message);
-        } finally {
-            window.app.hideLoading();
+            this.hideTypingIndicator();
+            console.error('[SupplierEvaluation] Error getting ranking rationale:', error);
+            let errorMessage = error.message || 'Failed to get ranking rationale';
+            
+            // Handle quota errors
+            if (error.status === 429 || errorMessage.includes('quota') || errorMessage.includes('429')) {
+                const retryAfter = error.detail?.retry_after || error.detail?.detail?.retry_after || 60;
+                errorMessage = `⚠️ API Quota Exceeded\n\nYou've reached the free tier rate limit. Please wait ${retryAfter} seconds before trying again.\n\nTip: The free tier has limited requests per minute. Consider upgrading your Google Gemini API plan for higher limits.`;
+                this.addChatMessage('bot', errorMessage, true);
+                window.app.showError(`Quota exceeded. Please wait ${retryAfter} seconds.`);
+            } else {
+                this.addChatMessage('bot', `Error: ${errorMessage}`, true);
+                window.app.showError('Failed to get ranking rationale: ' + errorMessage);
+            }
         }
     },
 
-    async compareAllModels() {
-        document.getElementById('compare-models-input').value = 'xgboost,random_forest,gradient_boosting,svm,neural_network,adaboost,ensemble';
-        this.compareModels();
-    }
+    async sendChatMessage() {
+        const input = document.getElementById('chatbot-input');
+        const message = input.value.trim();
+        
+        if (!message) return;
+
+        if (!this.currentEvaluationData.results) {
+            window.app.showError('Please upload a CSV file and get rankings first.');
+            return;
+        }
+
+        this.addChatMessage('user', message);
+        input.value = '';
+        const typingIndicator = this.showTypingIndicator();
+
+        try {
+            const result = await window.api.chatAboutRankings({
+                message: message,
+                csv_data: this.currentEvaluationData.csvData,
+                model_type: this.currentEvaluationData.modelType,
+                results: this.currentEvaluationData.results
+            });
+
+            this.hideTypingIndicator();
+
+            if (result.error) {
+                this.addChatMessage('bot', `Error: ${result.error}`, true);
+            } else {
+                this.addChatMessage('bot', result.response || result.answer || 'Response generated.');
+            }
+        } catch (error) {
+            this.hideTypingIndicator();
+            console.error('[SupplierEvaluation] Chat error:', error);
+            let errorMessage = error.message || 'Failed to get response';
+            
+            // Handle quota errors
+            if (error.status === 429 || errorMessage.includes('quota') || errorMessage.includes('429')) {
+                const retryAfter = error.detail?.retry_after || error.detail?.detail?.retry_after || 60;
+                errorMessage = `⚠️ API Quota Exceeded\n\nYou've reached the free tier rate limit. Please wait ${retryAfter} seconds before trying again.\n\nTip: The free tier has limited requests per minute. Consider upgrading your Google Gemini API plan for higher limits.`;
+                this.addChatMessage('bot', errorMessage, true);
+            } else {
+                this.addChatMessage('bot', `Error: ${errorMessage}`, true);
+            }
+        }
+    },
+
+    showTypingIndicator() {
+        const messagesContainer = document.getElementById('chatbot-messages');
+        if (!messagesContainer) return null;
+
+        const typingDiv = document.createElement('div');
+        typingDiv.id = 'typing-indicator';
+        typingDiv.className = 'chat-message bot-message';
+        typingDiv.style.cssText = `
+            background: var(--corp-gray-50);
+            color: var(--corp-gray-700);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            max-width: 80%;
+            word-wrap: break-word;
+        `;
+
+        const header = document.createElement('div');
+        header.style.cssText = 'font-weight: 600; margin-bottom: 0.5rem;';
+        header.innerHTML = '<i class="fas fa-robot"></i> AI Assistant';
+        typingDiv.appendChild(header);
+
+        const typingContent = document.createElement('div');
+        typingContent.style.cssText = 'display: flex; align-items: center; gap: 0.5rem;';
+        typingContent.innerHTML = `
+            <span class="typing-dot" style="width: 8px; height: 8px; background: var(--corp-primary); border-radius: 50%; animation: typing 1.4s infinite;"></span>
+            <span class="typing-dot" style="width: 8px; height: 8px; background: var(--corp-primary); border-radius: 50%; animation: typing 1.4s infinite 0.2s;"></span>
+            <span class="typing-dot" style="width: 8px; height: 8px; background: var(--corp-primary); border-radius: 50%; animation: typing 1.4s infinite 0.4s;"></span>
+            <span style="margin-left: 0.5rem; color: var(--corp-gray-600);">AI is typing...</span>
+        `;
+        typingDiv.appendChild(typingContent);
+
+        // Add CSS animation if not already added
+        if (!document.getElementById('typing-animation-style')) {
+            const style = document.createElement('style');
+            style.id = 'typing-animation-style';
+            style.textContent = `
+                @keyframes typing {
+                    0%, 60%, 100% {
+                        transform: translateY(0);
+                        opacity: 0.7;
+                    }
+                    30% {
+                        transform: translateY(-10px);
+                        opacity: 1;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        messagesContainer.appendChild(typingDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        return typingDiv;
+    },
+
+    hideTypingIndicator() {
+        const typingIndicator = document.getElementById('typing-indicator');
+        if (typingIndicator) {
+            typingIndicator.remove();
+        }
+    },
+
+    addChatMessage(sender, message, isError = false) {
+        const messagesContainer = document.getElementById('chatbot-messages');
+        if (!messagesContainer) return;
+
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `chat-message ${sender}-message`;
+        messageDiv.style.cssText = `
+            background: ${sender === 'user' ? 'var(--corp-primary)' : (isError ? '#fee' : 'var(--corp-gray-50)')};
+            color: ${sender === 'user' ? 'white' : 'var(--corp-gray-700)'};
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            margin-left: ${sender === 'user' ? 'auto' : '0'};
+            margin-right: ${sender === 'user' ? '0' : 'auto'};
+            max-width: 80%;
+            word-wrap: break-word;
+        `;
+
+        const header = document.createElement('div');
+        header.style.cssText = 'font-weight: 600; margin-bottom: 0.5rem;';
+        header.innerHTML = sender === 'user' 
+            ? '<i class="fas fa-user"></i> You'
+            : '<i class="fas fa-robot"></i> AI Assistant';
+        messageDiv.appendChild(header);
+
+        const content = document.createElement('div');
+        content.style.cssText = 'white-space: pre-wrap; line-height: 1.6;';
+        content.textContent = message;
+        messageDiv.appendChild(content);
+
+        messagesContainer.appendChild(messageDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    },
+
+    clearChat() {
+        const messagesContainer = document.getElementById('chatbot-messages');
+        if (messagesContainer) {
+            messagesContainer.innerHTML = `
+                <div class="chat-message bot-message" style="background: var(--corp-gray-50); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                    <div style="font-weight: 600; color: var(--corp-primary); margin-bottom: 0.5rem;">
+                        <i class="fas fa-robot"></i> AI Assistant
+                    </div>
+                    <div style="color: var(--corp-gray-700);">
+                        Hello! I'm your AI Ranking Rationale Assistant powered by Gemini 2.5 Flash. 
+                        Upload a CSV file, select a model, and get rankings to see detailed explanations for why suppliers are ranked the way they are.
+                    </div>
+                </div>
+            `;
+        }
+    },
 };

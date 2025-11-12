@@ -14,6 +14,17 @@ window.FraudPredictionPage = {
             </div>
 
             <div class="card mb-4">
+                <div id="fraud-loading" style="display: none; text-align: center; padding: 2rem; margin-bottom: 1rem;">
+                    <div style="display: inline-block;">
+                        <div style="display: flex; align-items: center; gap: 1rem; color: var(--corp-primary);">
+                            <div style="width: 2rem; height: 2rem; border: 3px solid var(--corp-gray-200); border-top-color: var(--corp-primary); border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+                            <div style="font-size: 1rem; font-weight: 500;">
+                                Analyzing fraud predictions... Please wait
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="fraud-content">
                 <div class="form-group">
                     <label class="form-label">Select Model</label>
                     <select id="fraud-model-type" class="form-control">
@@ -24,6 +35,7 @@ window.FraudPredictionPage = {
                 <button id="predict-fraud-btn" class="btn btn-primary">
                     <i class="fas fa-search"></i> Predict Fraud
                 </button>
+                </div>
             </div>
 
             <div id="fraud-results" style="display: none;">
@@ -35,10 +47,22 @@ window.FraudPredictionPage = {
 
                 <div class="card mb-4">
                     <h3 class="card-title">⚖️ Model Comparison</h3>
+                    <div id="comparison-loading" style="display: none; text-align: center; padding: 2rem; margin-bottom: 1rem;">
+                        <div style="display: inline-block;">
+                            <div style="display: flex; align-items: center; gap: 1rem; color: var(--corp-primary);">
+                                <div style="width: 2rem; height: 2rem; border: 3px solid var(--corp-gray-200); border-top-color: var(--corp-primary); border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+                                <div style="font-size: 1rem; font-weight: 500;">
+                                    Comparing models... Please wait
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="comparison-content">
                     <button id="compare-fraud-models-btn" class="btn btn-secondary mb-3">
                         <i class="fas fa-balance-scale"></i> Compare Models
                     </button>
                     <div id="fraud-comparison-chart" class="chart-container"></div>
+                    </div>
                 </div>
             </div>
         `;
@@ -51,7 +75,7 @@ window.FraudPredictionPage = {
 
     async predictFraud() {
         try {
-            window.app.showLoading();
+            this.showLoading('fraud');
             const modelType = document.getElementById('fraud-model-type').value;
             const result = await (window.api).predictFraud(null, modelType);
             
@@ -100,13 +124,13 @@ window.FraudPredictionPage = {
         } catch (error) {
             window.app.showError('Failed to predict fraud: ' + error.message);
         } finally {
-            window.app.hideLoading();
+            this.hideLoading('fraud');
         }
     },
 
     async compareModels() {
         try {
-            window.app.showLoading();
+            this.showLoading('comparison');
             const result = await (window.api).compareFraudModels();
             
             if (result.error) {
@@ -134,8 +158,24 @@ window.FraudPredictionPage = {
         } catch (error) {
             window.app.showError('Failed to compare models: ' + error.message);
         } finally {
-            window.app.hideLoading();
+            this.hideLoading('comparison');
         }
+    },
+
+    showLoading(section) {
+        const loadingEl = document.getElementById(`${section}-loading`);
+        const contentEl = document.getElementById(`${section}-content`);
+        if (loadingEl) loadingEl.style.display = 'block';
+        if (contentEl) contentEl.style.opacity = '0.5';
+        if (contentEl) contentEl.style.pointerEvents = 'none';
+    },
+
+    hideLoading(section) {
+        const loadingEl = document.getElementById(`${section}-loading`);
+        const contentEl = document.getElementById(`${section}-content`);
+        if (loadingEl) loadingEl.style.display = 'none';
+        if (contentEl) contentEl.style.opacity = '1';
+        if (contentEl) contentEl.style.pointerEvents = 'auto';
     }
 };
 

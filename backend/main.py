@@ -9,6 +9,8 @@ from fastapi.exceptions import RequestValidationError
 from config.settings import settings
 from core.security import setup_cors
 import traceback
+
+# Import routes - make optional routes optional
 from api.routes import (
     supplier_evaluation,
     risk_profiling,
@@ -17,8 +19,19 @@ from api.routes import (
     decision_support,
     ethics_compliance,
     transparency,
-    gemini
+    gemini,
+    ensemble_stacking,
+    websocket as websocket_routes
 )
+
+# Optional routes - import only if available
+try:
+    from api.routes import conversational_ai
+    CONVERSATIONAL_AI_AVAILABLE = True
+except ImportError as e:
+    print(f"Warning: Conversational AI routes not available: {e}")
+    CONVERSATIONAL_AI_AVAILABLE = False
+    conversational_ai = None
 
 # Create FastAPI app
 app = FastAPI(
@@ -39,6 +52,10 @@ app.include_router(decision_support.router, prefix="/api/v1/decision", tags=["De
 app.include_router(ethics_compliance.router, prefix="/api/v1/ethics", tags=["Ethics & Compliance"])
 app.include_router(transparency.router, prefix="/api/v1/transparency", tags=["Transparency"])
 app.include_router(gemini.router, prefix="/api/v1/gemini", tags=["Gemini AI"])
+if CONVERSATIONAL_AI_AVAILABLE and conversational_ai:
+    app.include_router(conversational_ai.router, prefix="/api/v1/ai", tags=["Conversational AI"])
+app.include_router(ensemble_stacking.router, prefix="/api/v1/stacking", tags=["Ensemble Stacking"])
+app.include_router(websocket_routes.router, prefix="/api/v1", tags=["WebSocket"])
 
 
 @app.get("/")
@@ -79,4 +96,3 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         status_code=422,
         content={"detail": exc.errors(), "body": exc.body}
     )
-

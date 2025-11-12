@@ -36,7 +36,19 @@ window.APIClient = class APIClient {
                 } catch {
                     errorData = { detail: errorText };
                 }
-                throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+                
+                // Handle 429 quota errors specifically
+                if (response.status === 429) {
+                    const error = new Error(errorData.detail?.message || errorData.error || 'Quota exceeded');
+                    error.status = 429;
+                    error.detail = errorData.detail || errorData;
+                    throw error;
+                }
+                
+                const error = new Error(errorData.detail || errorData.error || `HTTP error! status: ${response.status}`);
+                error.status = response.status;
+                error.detail = errorData.detail || errorData;
+                throw error;
             }
             
             const data = await response.json();
@@ -76,6 +88,45 @@ window.APIClient = class APIClient {
         return this.request(`/suppliers/feature-importance/${modelType}`);
     }
 
+    async uploadAndEvaluate(file, modelType = 'xgboost', topN = null) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('model_type', modelType);
+        if (topN !== null && topN !== undefined) {
+            formData.append('top_n', topN.toString());
+        }
+        
+        console.log('[API] Uploading file:', file.name, 'Model:', modelType, 'TopN:', topN);
+        
+        try {
+            const response = await fetch(`${this.baseURL}/suppliers/upload-and-evaluate`, {
+                method: 'POST',
+                body: formData
+            });
+            
+            console.log('[API] Upload response status:', response.status);
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('[API] Upload error response:', errorText);
+                let errorData;
+                try {
+                    errorData = JSON.parse(errorText);
+                } catch {
+                    errorData = { detail: errorText };
+                }
+                throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            console.log('[API] Upload success:', data);
+            return data;
+        } catch (error) {
+            console.error('[API] Upload request failed:', error);
+            throw error;
+        }
+    }
+
     // Risk Profiling
     async predictRisk(supplierIds = null) {
         return this.request('/risk/predict', {
@@ -95,6 +146,20 @@ window.APIClient = class APIClient {
         return this.request('/risk/data-sources');
     }
 
+    async getRiskAnalysisRationale(data) {
+        return this.request('/gemini/risk-analysis-rationale', {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+    }
+
+    async chatAboutRisks(data) {
+        return this.request('/gemini/chat-risks', {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+    }
+
     // Fraud Detection
     async predictFraud(supplierIds = null, modelType = 'random_forest') {
         return this.request('/fraud/predict', {
@@ -107,6 +172,20 @@ window.APIClient = class APIClient {
         return this.request('/fraud/compare-models', {
             method: 'POST',
             body: JSON.stringify({ supplier_ids: supplierIds })
+        });
+    }
+
+    async getContractAnalysisRationale(data) {
+        return this.request('/gemini/contract-analysis-rationale', {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+    }
+
+    async chatAboutContract(data) {
+        return this.request('/gemini/chat-contract', {
+            method: 'POST',
+            body: JSON.stringify(data)
         });
     }
 
@@ -195,6 +274,24 @@ window.APIClient = class APIClient {
 
     async getResilienceMetrics() {
         return this.request('/transparency/resilience-metrics');
+    }
+
+    async getTransparencyScores() {
+        return this.request('/transparency/transparency-scores');
+    }
+
+    async getRankingRationale(data) {
+        return this.request('/gemini/ranking-rationale', {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+    }
+
+    async chatAboutRankings(data) {
+        return this.request('/gemini/chat-rankings', {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
     }
 
     // Gemini AI

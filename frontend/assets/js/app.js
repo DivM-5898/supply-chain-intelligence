@@ -42,6 +42,13 @@ class DashboardApp {
     }
 
     navigateToPage(pageName) {
+        const isFromLanding = this.currentPage === 'home' && pageName !== 'home';
+        
+        // Show creative loading animation when navigating from landing page
+        if (isFromLanding) {
+            this.showNavigationLoading();
+        }
+        
         // Update active menu item
         document.querySelectorAll('.sidebar-menu a').forEach(link => {
             link.classList.remove('active');
@@ -53,14 +60,14 @@ class DashboardApp {
         // Hide all pages with fade out animation
         document.querySelectorAll('.page-content').forEach(page => {
             if (page.classList.contains('active')) {
-                page.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                page.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
                 page.style.opacity = '0';
                 page.style.transform = 'translateX(-20px)';
                 setTimeout(() => {
                     page.classList.remove('active');
                     page.style.display = 'none';
                     page.style.visibility = 'hidden';
-                }, 300);
+                }, 200);
             }
         });
 
@@ -125,7 +132,20 @@ class DashboardApp {
                 targetPage.classList.add('active');
                 this.currentPage = pageName;
                 this.updatePageTitle(pageName);
-                this.loadPageContent(pageName);
+                
+                // Load page content asynchronously
+                this.loadPageContent(pageName).then(() => {
+                    // Hide navigation loading after content loads
+                    if (isFromLanding) {
+                        setTimeout(() => {
+                            this.hideNavigationLoading();
+                        }, 300);
+                    }
+                }).catch(() => {
+                    if (isFromLanding) {
+                        this.hideNavigationLoading();
+                    }
+                });
                 
                 // Fade in animation
                 setTimeout(() => {
@@ -140,8 +160,11 @@ class DashboardApp {
                 }, 50);
             } else {
                 console.error(`Page element not found: page-${pageName}`);
+                if (isFromLanding) {
+                    this.hideNavigationLoading();
+                }
             }
-        }, 300);
+        }, 200);
     }
 
     updatePageTitle(pageName) {
@@ -245,6 +268,52 @@ class DashboardApp {
     hideLoading() {
         const overlay = document.getElementById('loadingOverlay');
         if (overlay) overlay.style.display = 'none';
+    }
+
+    showNavigationLoading() {
+        // Create or show creative navigation loading overlay
+        let navLoader = document.getElementById('navigation-loader');
+        if (!navLoader) {
+            navLoader = document.createElement('div');
+            navLoader.id = 'navigation-loader';
+            navLoader.innerHTML = `
+                <div class="nav-loader-backdrop"></div>
+                <div class="nav-loader-content">
+                    <div class="nav-loader-animation">
+                        <div class="nav-loader-circle nav-loader-circle-1"></div>
+                        <div class="nav-loader-circle nav-loader-circle-2"></div>
+                        <div class="nav-loader-circle nav-loader-circle-3"></div>
+                        <div class="nav-loader-circle nav-loader-circle-4"></div>
+                        <div class="nav-loader-circle nav-loader-circle-5"></div>
+                    </div>
+                    <div class="nav-loader-text">
+                        <div class="nav-loader-title">Loading Dashboard</div>
+                        <div class="nav-loader-subtitle">Preparing your analytics workspace...</div>
+                    </div>
+                    <div class="nav-loader-progress">
+                        <div class="nav-loader-progress-bar"></div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(navLoader);
+        }
+        navLoader.style.display = 'flex';
+        navLoader.style.opacity = '0';
+        setTimeout(() => {
+            navLoader.style.transition = 'opacity 0.3s ease';
+            navLoader.style.opacity = '1';
+        }, 10);
+    }
+
+    hideNavigationLoading() {
+        const navLoader = document.getElementById('navigation-loader');
+        if (navLoader) {
+            navLoader.style.transition = 'opacity 0.3s ease';
+            navLoader.style.opacity = '0';
+            setTimeout(() => {
+                navLoader.style.display = 'none';
+            }, 300);
+        }
     }
 
     showError(message) {
