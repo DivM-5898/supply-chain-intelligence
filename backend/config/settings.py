@@ -28,10 +28,34 @@ class Settings(BaseSettings):
     
     # API Keys (for external services)
     OPENAI_API_KEY: Optional[str] = os.getenv("OPENAI_API_KEY", "")
-    GEMINI_API_KEY: Optional[str] = os.getenv("GEMINI_API_KEY", "AIzaSyA8b_9uzdOv7NLxYx4VV88SPHU4pPf65-Y")
+    ANTHROPIC_API_KEY: Optional[str] = os.getenv("ANTHROPIC_API_KEY", "")
+    GEMINI_API_KEY: Optional[str] = os.getenv("GEMINI_API_KEY", "AIzaSyCEkfJRwoFvdBKh6RP-gGlil80dxm4CGo8")
+    
+    # Kafka Configuration
+    KAFKA_BOOTSTRAP_SERVERS: str = os.getenv("KAFKA_BOOTSTRAP_SERVERS", "localhost:9092")
+    KAFKA_ENABLED: bool = os.getenv("KAFKA_ENABLED", "false").lower() == "true"
+    
+    # Redis Configuration
+    REDIS_HOST: str = os.getenv("REDIS_HOST", "localhost")
+    REDIS_PORT: int = int(os.getenv("REDIS_PORT", "6379"))
+    REDIS_ENABLED: bool = os.getenv("REDIS_ENABLED", "false").lower() == "true"
+    
+    # WebSocket Configuration
+    WEBSOCKET_ENABLED: bool = True
+    
+    # Security Configuration
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "your-secret-key-change-in-production")
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    MFA_ENABLED: bool = True
     
     # CORS Configuration
-    CORS_ORIGINS: list = ["http://localhost:8501", "http://127.0.0.1:8501"]
+    CORS_ORIGINS: list = [
+        "http://localhost:8501",
+        "http://127.0.0.1:8501",
+        "http://localhost:8080",
+        "http://127.0.0.1:8080"
+    ]
     
     # Model Configuration
     XGBOOST_PARAMS: dict = {

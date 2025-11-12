@@ -23,8 +23,13 @@ import sys
 import os
 backend_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, backend_path)
-from utils.data_loader import data_loader
+
 from utils.preprocessing import preprocessor
+
+# Import data_loader only when needed to avoid startup errors
+def get_data_loader():
+    from utils.data_loader import data_loader
+    return data_loader
 
 
 class SupplierScoringService:
@@ -48,6 +53,7 @@ class SupplierScoringService:
         Prepare training data with target labels
         Creates a composite score as target variable
         """
+        data_loader = get_data_loader()
         suppliers_df = data_loader.load_suppliers()
         df, feature_cols = preprocessor.prepare_supplier_features(suppliers_df)
         self.feature_columns = feature_cols
@@ -387,19 +393,48 @@ class SupplierScoringService:
             'neural_network': 'nn_scaler.pkl'
         }
         
+        loaded_count = 0
         for model_name, filename in model_files.items():
             model_path = os.path.join(self.models_dir, filename)
             if os.path.exists(model_path):
-                self.models[model_name] = joblib.load(model_path)
+                try:
+                    self.models[model_name] = joblib.load(model_path)
+                    loaded_count += 1
+                    print(f"Loaded {model_name} model successfully")
+                except Exception as e:
+                    print(f"Warning: Failed to load {model_name} model: {str(e)}")
         
         for scaler_name, filename in scaler_files.items():
             scaler_path = os.path.join(self.models_dir, filename)
             if os.path.exists(scaler_path):
-                self.scalers[scaler_name] = joblib.load(scaler_path)
+                try:
+                    self.scalers[scaler_name] = joblib.load(scaler_path)
+                    print(f"Loaded {scaler_name} scaler successfully")
+                except Exception as e:
+                    print(f"Warning: Failed to load {scaler_name} scaler: {str(e)}")
         
         # Load feature columns
-        suppliers_df = data_loader.load_suppliers()
-        _, self.feature_columns = preprocessor.prepare_supplier_features(suppliers_df)
+        try:
+            data_loader = get_data_loader()
+            suppliers_df = data_loader.load_suppliers()
+            _, self.feature_columns = preprocessor.prepare_supplier_features(suppliers_df)
+            print(f"Loaded {len(self.feature_columns)} feature columns")
+        except Exception as e:
+            print(f"Warning: Failed to load feature columns: {str(e)}")
+            # Use default feature columns if loading fails
+            self.feature_columns = [
+                'performance_score', 'financial_health', 'operational_maturity',
+                'avg_delivery_time_days', 'on_time_delivery_rate', 'quality_score',
+                'credit_score', 'profit_margin', 'years_in_business', 'utilization_rate',
+                'geopolitical_risk_score', 'esg_score', 'compliance_score', 'certifications_encoded'
+            ]
+        
+        if loaded_count == 0:
+            # Don't raise error, just log warning - allow service to continue
+            print(f"Warning: No models found in {self.models_dir}. Please train models first.")
+            return
+        
+        print(f"Successfully loaded {loaded_count} models")
     
     def predict_supplier_score(self, supplier_ids: List[str], 
                               model_type: str = 'xgboost') -> pd.DataFrame:
@@ -413,6 +448,7 @@ class SupplierScoringService:
         if model_type not in self.models:
             raise ValueError(f"Model {model_type} not available. Available models: {list(self.models.keys())}")
         
+        data_loader = get_data_loader()
         suppliers_df = data_loader.load_suppliers()
         df, _ = preprocessor.prepare_supplier_features(suppliers_df)
         
@@ -445,9 +481,23 @@ class SupplierScoringService:
     
     def get_available_models(self) -> List[str]:
         """Get list of available models"""
-        if not self.models:
-            self.load_models()
-        return list(self.models.keys())
+        try:
+            if not self.models:
+                # Try to load models, but don't fail if they don't exist
+                try:
+                    self.load_models()
+                except FileNotFoundError:
+                    # Models don't exist, return empty list
+                    return []
+                except Exception as e:
+                    # Other error loading models, log and return empty
+                    print(f"Warning: Error loading models: {e}")
+                    return []
+            
+            return list(self.models.keys())
+        except Exception as e:
+            print(f"Error in get_available_models: {e}")
+            return []
     
     def compare_models(self, supplier_ids: Optional[List[str]] = None, 
                       model_list: Optional[List[str]] = None) -> pd.DataFrame:
@@ -495,6 +545,21 @@ class SupplierScoringService:
         return comparison.sort_values('avg_score', ascending=False)
 
 
-# Global instance
-supplier_scoring_service = SupplierScoringService()
+# Global instance - lazy initialization to avoid startup errors
+supplier_scoring_service = None
+
+def get_supplier_scoring_service():
+    """Get or create supplier scoring service instance"""
+    global supplier_scoring_service
+    if supplier_scoring_service is None:
+        supplier_scoring_service = SupplierScoringService()
+    return supplier_scoring_service
+
+# Initialize on import (but handle errors gracefully)
+try:
+    supplier_scoring_service = SupplierScoringService()
+except Exception as e:
+    import warnings
+    warnings.warn(f"Failed to initialize SupplierScoringService: {e}. Will initialize on first use.")
+    supplier_scoring_service = None
 

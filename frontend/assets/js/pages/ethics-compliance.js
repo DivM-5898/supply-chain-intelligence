@@ -15,6 +15,17 @@ window.EthicsCompliancePage = {
 
             <div class="card mb-4">
                 <h3 class="card-title">🔍 Model Explainability</h3>
+                <div id="explain-loading" style="display: none; text-align: center; padding: 2rem; margin-bottom: 1rem;">
+                    <div style="display: inline-block;">
+                        <div style="display: flex; align-items: center; gap: 1rem; color: var(--corp-primary);">
+                            <div style="width: 2rem; height: 2rem; border: 3px solid var(--corp-gray-200); border-top-color: var(--corp-primary); border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+                            <div style="font-size: 1rem; font-weight: 500;">
+                                Generating explanation... Please wait
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="explain-content">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -35,6 +46,7 @@ window.EthicsCompliancePage = {
                 <button id="explain-btn" class="btn btn-primary">
                     <i class="fas fa-search"></i> Explain Prediction
                 </button>
+                </div>
             </div>
 
             <div id="explanation-results" style="display: none;">
@@ -46,6 +58,17 @@ window.EthicsCompliancePage = {
 
             <div class="card mb-4">
                 <h3 class="card-title">⚖️ Bias Detection</h3>
+                <div id="bias-loading" style="display: none; text-align: center; padding: 2rem; margin-bottom: 1rem;">
+                    <div style="display: inline-block;">
+                        <div style="display: flex; align-items: center; gap: 1rem; color: var(--corp-primary);">
+                            <div style="width: 2rem; height: 2rem; border: 3px solid var(--corp-gray-200); border-top-color: var(--corp-primary); border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+                            <div style="font-size: 1rem; font-weight: 500;">
+                                Detecting bias... Please wait
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="bias-content">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -62,6 +85,7 @@ window.EthicsCompliancePage = {
                 <button id="detect-bias-btn" class="btn btn-warning">
                     <i class="fas fa-balance-scale"></i> Detect Bias
                 </button>
+                </div>
             </div>
 
             <div id="bias-results" style="display: none;">
@@ -73,10 +97,22 @@ window.EthicsCompliancePage = {
 
             <div class="card mb-4">
                 <h3 class="card-title">🌱 ESG Compliance Scores</h3>
+                <div id="esg-loading" style="display: none; text-align: center; padding: 2rem; margin-bottom: 1rem;">
+                    <div style="display: inline-block;">
+                        <div style="display: flex; align-items: center; gap: 1rem; color: var(--corp-primary);">
+                            <div style="width: 2rem; height: 2rem; border: 3px solid var(--corp-gray-200); border-top-color: var(--corp-primary); border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+                            <div style="font-size: 1rem; font-weight: 500;">
+                                Loading ESG scores... Please wait
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="esg-content">
                 <button id="load-esg-btn" class="btn btn-success mb-3">
                     <i class="fas fa-leaf"></i> View ESG Scores
                 </button>
                 <div id="esg-table" class="table-container"></div>
+                </div>
             </div>
         `;
     },
@@ -89,7 +125,7 @@ window.EthicsCompliancePage = {
 
     async explainPrediction() {
         try {
-            window.app.showLoading();
+            this.showLoading('explain');
             const supplierId = document.getElementById('explain-supplier-id').value;
             const explanationType = document.getElementById('explanation-type').value;
 
@@ -142,13 +178,13 @@ window.EthicsCompliancePage = {
         } catch (error) {
             window.app.showError('Failed to generate explanation: ' + error.message);
         } finally {
-            window.app.hideLoading();
+            this.hideLoading('explain');
         }
     },
 
     async detectBias() {
         try {
-            window.app.showLoading();
+            this.showLoading('bias');
             const featureName = document.getElementById('bias-feature').value;
 
             const result = await (window.api).detectBias(featureName);
@@ -179,13 +215,13 @@ window.EthicsCompliancePage = {
         } catch (error) {
             window.app.showError('Failed to detect bias: ' + error.message);
         } finally {
-            window.app.hideLoading();
+            this.hideLoading('bias');
         }
     },
 
     async loadESGScores() {
         try {
-            window.app.showLoading();
+            this.showLoading('esg');
             const result = await (window.api).getESGScores();
             if (result.error) {
                 window.app.showError(result.error);
@@ -202,8 +238,24 @@ window.EthicsCompliancePage = {
         } catch (error) {
             window.app.showError('Failed to load ESG scores: ' + error.message);
         } finally {
-            window.app.hideLoading();
+            this.hideLoading('esg');
         }
+    },
+
+    showLoading(section) {
+        const loadingEl = document.getElementById(`${section}-loading`);
+        const contentEl = document.getElementById(`${section}-content`);
+        if (loadingEl) loadingEl.style.display = 'block';
+        if (contentEl) contentEl.style.opacity = '0.5';
+        if (contentEl) contentEl.style.pointerEvents = 'none';
+    },
+
+    hideLoading(section) {
+        const loadingEl = document.getElementById(`${section}-loading`);
+        const contentEl = document.getElementById(`${section}-content`);
+        if (loadingEl) loadingEl.style.display = 'none';
+        if (contentEl) contentEl.style.opacity = '1';
+        if (contentEl) contentEl.style.pointerEvents = 'auto';
     }
 };
 

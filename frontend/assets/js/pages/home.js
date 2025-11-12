@@ -12,8 +12,18 @@ window.HomePage = {
             // Set loading state
             container.innerHTML = '<div style="text-align: center; padding: 50px;"><i class="fas fa-spinner fa-spin fa-3x"></i><p>Loading landing page...</p></div>';
             
+            // Small delay to ensure DOM is ready
+            await new Promise(resolve => setTimeout(resolve, 50));
+            
             // Get HTML content
-            const html = this.getHTML();
+            let html;
+            try {
+                html = this.getHTML();
+            } catch (error) {
+                console.error('Error in getHTML():', error);
+                html = null;
+            }
+            
             if (!html || html.trim() === '') {
                 console.error('getHTML() returned empty content');
                 container.innerHTML = '<div class="alert alert-danger">Failed to load landing page content</div>';
@@ -22,23 +32,38 @@ window.HomePage = {
             
             // Render HTML
             container.innerHTML = html;
-            console.log('Landing page HTML rendered');
+            console.log('Landing page HTML rendered, length:', html.length);
             
             // Wait for DOM to update
             setTimeout(() => {
                 try {
-                    this.setupAnimations();
-                    this.loadStats();
-                    this.setupWorkflow();
-                    this.setupScrollReveal();
+                    if (typeof this.setupAnimations === 'function') {
+                        this.setupAnimations();
+                    }
+                    if (typeof this.loadStats === 'function') {
+                        this.loadStats();
+                    }
+                    if (typeof this.setupWorkflow === 'function') {
+                        this.setupWorkflow();
+                    }
+                    if (typeof this.setupScrollReveal === 'function') {
+                        this.setupScrollReveal();
+                    }
                     console.log('Landing page initialized successfully');
+                    
+                    // Hide loading overlay if it exists
+                    const loadingOverlay = document.getElementById('loadingOverlay');
+                    if (loadingOverlay) {
+                        loadingOverlay.style.display = 'none';
+                    }
                 } catch (error) {
                     console.error('Error setting up landing page features:', error);
+                    // Don't fail completely, page content is already rendered
                 }
             }, 100);
         } catch (error) {
             console.error('Error initializing landing page:', error);
-            container.innerHTML = `<div class="alert alert-danger">Error loading landing page: ${error.message}</div>`;
+            container.innerHTML = `<div class="alert alert-danger">Error loading landing page: ${error.message}<br><small>${error.stack}</small></div>`;
         }
     },
 
@@ -334,12 +359,8 @@ window.HomePage = {
                         </div>
 
                         <!-- Animated Data Flow -->
-                        <div class="workflow-data-flow" id="workflow-data-flow">
-                            <div class="data-particle" data-particle="1"></div>
-                            <div class="data-particle" data-particle="2"></div>
-                            <div class="data-particle" data-particle="3"></div>
-                            <div class="data-particle" data-particle="4"></div>
-                            <div class="data-particle" data-particle="5"></div>
+                        <div class="workflow-data-flow" id="workflow-data-flow" style="display: none;">
+                            <!-- Data particles removed -->
                         </div>
                     </div>
 
@@ -364,70 +385,6 @@ window.HomePage = {
                             <div class="workflow-stat-icon"><i class="fas fa-check-double"></i></div>
                             <div class="workflow-stat-value">99%</div>
                             <div class="workflow-stat-label">Accuracy</div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Features Section -->
-            <section class="features-section" data-aos="fade-up" data-aos-duration="800">
-                <div class="container">
-                    <h2 class="text-center mb-5" data-aos="fade-up" data-aos-duration="600">
-                        Core Capabilities
-                    </h2>
-                    <p class="text-center mb-5" data-aos="fade-up" data-aos-delay="100" style="font-size: 1.25rem; color: var(--corp-gray-600); max-width: 700px; margin: 0 auto 3rem;">
-                        Comprehensive AI-powered solutions for intelligent supplier management
-                    </p>
-                    <div class="features-grid">
-                        <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
-                            <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
-                            <h3 class="feature-title">Supplier Evaluation</h3>
-                            <p class="feature-description">
-                                7 advanced ML models (XGBoost, Random Forest, Gradient Boosting, SVM, Neural Networks, AdaBoost, Ensemble) 
-                                for comprehensive supplier scoring and ranking.
-                            </p>
-                        </div>
-                        <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
-                            <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
-                            <h3 class="feature-title">Risk Profiling</h3>
-                            <p class="feature-description">
-                                Multi-dimensional risk analysis with real-time predictions, anomaly detection, and geographic risk mapping.
-                            </p>
-                        </div>
-                        <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
-                            <div class="feature-icon"><i class="fas fa-exclamation-triangle"></i></div>
-                            <h3 class="feature-title">Fraud Detection</h3>
-                            <p class="feature-description">
-                                Advanced fraud prediction models with probability scoring and multi-model comparison for accurate detection.
-                            </p>
-                        </div>
-                        <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
-                            <div class="feature-icon"><i class="fas fa-file-contract"></i></div>
-                            <h3 class="feature-title">NLP Contract Analysis</h3>
-                            <p class="feature-description">
-                                Powered by BERT, spaCy, and Google Gemini AI for intelligent contract analysis, entity extraction, and risk assessment.
-                            </p>
-                        </div>
-                        <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
-                            <div class="feature-icon"><i class="fas fa-balance-scale"></i></div>
-                            <h3 class="feature-title">Decision Support</h3>
-                            <p class="feature-description">
-                                TOPSIS and AHP algorithms for multi-criteria decision-making with customizable weight assignments.
-                            </p>
-                        </div>
-                        <div class="feature-card" data-aos="fade-up" data-aos-delay="600">
-                            <div class="feature-icon"><i class="fas fa-check-circle"></i></div>
-                            <h3 class="feature-title">Ethics & Compliance</h3>
-                            <p class="feature-description">
-                                SHAP/LIME explainability, bias detection, and ESG compliance scoring for transparent AI decisions.
-                            </p>
-                        </div>
-                        <div class="feature-card" data-aos="fade-up" data-aos-delay="700">
-                            <div class="feature-icon"><i class="fas fa-globe"></i></div>
-                            <h3 class="feature-title">Transparency & Resilience</h3>
-                            <p class="feature-description">
-                                Global supply chain visualization, resilience metrics, and transparency scores for comprehensive oversight.
-                            </p>
                         </div>
                     </div>
                 </div>
@@ -527,8 +484,8 @@ window.HomePage = {
                             <ul style="list-style: none; padding: 0;">
                                 <li style="padding: 0.5rem 0;"><i class="fas fa-check-circle" style="margin-right: 0.5rem; color: var(--corp-accent);"></i> XGBoost & Random Forest</li>
                                 <li style="padding: 0.5rem 0;"><i class="fas fa-check-circle" style="margin-right: 0.5rem; color: var(--corp-accent);"></i> Gradient Boosting</li>
-                                <li style="padding: 0.5rem 0;"><i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i> Neural Networks</li>
-                                <li style="padding: 0.5rem 0;"><i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i> SVM & AdaBoost</li>
+                                <li style="padding: 0.5rem 0;"><i class="fas fa-check-circle" style="margin-right: 0.5rem; color: var(--corp-accent);"></i> Neural Networks</li>
+                                <li style="padding: 0.5rem 0;"><i class="fas fa-check-circle" style="margin-right: 0.5rem; color: var(--corp-accent);"></i> SVM & AdaBoost</li>
                             </ul>
                         </div>
                         <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
@@ -645,14 +602,8 @@ window.HomePage = {
                 }, index * 400);
             });
 
-            // Animate data particles flowing through workflow
-            const particles = dataFlow.querySelectorAll('.data-particle');
-            particles.forEach((particle, index) => {
-                setTimeout(() => {
-                    particle.style.animation = `flowThroughWorkflow ${8 + index * 0.5}s ease-in-out infinite`;
-                    particle.style.animationDelay = `${index * 1.5}s`;
-                }, 2000);
-            });
+            // Data particles animation removed - no longer animating particles
+            // The workflow-data-flow container is hidden via CSS (display: none)
 
             // Click to expand details
             steps.forEach(step => {

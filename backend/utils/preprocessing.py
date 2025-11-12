@@ -7,6 +7,7 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder
 from typing import List, Tuple, Optional
+from utils.advanced_feature_engineering import advanced_feature_engineer
 
 
 class Preprocessor:
@@ -16,12 +17,43 @@ class Preprocessor:
         self.scalers = {}
         self.label_encoders = {}
     
-    def prepare_supplier_features(self, df: pd.DataFrame) -> Tuple[pd.DataFrame, List[str]]:
+    def prepare_supplier_features(self, df: pd.DataFrame, 
+                                  use_advanced_features: bool = False) -> Tuple[pd.DataFrame, List[str]]:
         """
-        Prepare features for supplier scoring model
+        Prepare features for supplier scoring model with advanced feature engineering
         Returns: (processed_df, feature_columns)
         """
         df = df.copy()
+        
+        # Add default values for missing columns
+        if 'has_erp_system' not in df.columns:
+            df['has_erp_system'] = False
+        if 'certifications' not in df.columns:
+            df['certifications'] = 'None'
+        if 'on_time_delivery_rate' not in df.columns:
+            df['on_time_delivery_rate'] = 0.8
+        if 'quality_score' not in df.columns:
+            df['quality_score'] = 0.8
+        if 'defect_rate' not in df.columns:
+            df['defect_rate'] = 0.05
+        if 'credit_score' not in df.columns:
+            df['credit_score'] = 650
+        if 'debt_to_equity' not in df.columns:
+            df['debt_to_equity'] = 0.5
+        if 'profit_margin' not in df.columns:
+            df['profit_margin'] = 0.1
+        if 'years_in_business' not in df.columns:
+            df['years_in_business'] = 10
+        if 'utilization_rate' not in df.columns:
+            df['utilization_rate'] = 0.75
+        if 'avg_delivery_time_days' not in df.columns:
+            df['avg_delivery_time_days'] = 7
+        if 'geopolitical_risk_score' not in df.columns:
+            df['geopolitical_risk_score'] = 0.5
+        if 'esg_score' not in df.columns:
+            df['esg_score'] = 0.7
+        if 'compliance_score' not in df.columns:
+            df['compliance_score'] = 0.8
         
         # Create composite features
         df['performance_score'] = (
@@ -49,6 +81,23 @@ class Preprocessor:
             df['certifications_encoded'] = le.fit_transform(df['certifications'].fillna('None'))
             self.label_encoders['certifications'] = le
         
+        # Apply advanced feature engineering
+        if use_advanced_features:
+            try:
+                # Statistical features
+                df = advanced_feature_engineer.create_zscore_features(df)
+                df = advanced_feature_engineer.create_ratio_features(df)
+                df = advanced_feature_engineer.create_logarithmic_features(df)
+                
+                # Domain-specific features
+                df = advanced_feature_engineer.create_supplier_reliability_index(df)
+                df = advanced_feature_engineer.create_financial_health_score(df)
+                df = advanced_feature_engineer.create_contract_compliance_rate(df)
+                df = advanced_feature_engineer.create_supplier_diversification_index(df)
+            except Exception as e:
+                import warnings
+                warnings.warn(f"Advanced feature engineering failed: {str(e)}. Using basic features only.")
+        
         # Select features for modeling
         feature_columns = [
             'performance_score',
@@ -66,6 +115,16 @@ class Preprocessor:
             'compliance_score',
             'certifications_encoded'
         ]
+        
+        # Add advanced features if available
+        if use_advanced_features:
+            advanced_cols = [
+                'supplier_reliability_index',
+                'financial_health_score',
+                'contract_compliance_rate',
+                'supplier_diversification_index'
+            ]
+            feature_columns.extend([col for col in advanced_cols if col in df.columns])
         
         # Ensure all columns exist
         available_features = [col for col in feature_columns if col in df.columns]

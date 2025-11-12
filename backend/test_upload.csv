@@ -1,0 +1,7 @@
+supplier_id,on_time_delivery_rate,quality_score,credit_score
+TEST_001,0.95,0.88,720
+TEST_002,0.82,0.76,650
+TEST_003,0.90,0.85,680
+TEST_004,0.88,0.82,700
+TEST_005,0.92,0.90,750
+

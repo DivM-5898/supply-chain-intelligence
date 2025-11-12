@@ -27,6 +27,17 @@ window.DecisionSupportPage = {
                 <div class="card mb-4">
                     <h3 class="card-title">📊 TOPSIS Ranking</h3>
                     <p>Define criteria weights (will be normalized automatically)</p>
+                    <div id="topsis-loading" style="display: none; text-align: center; padding: 2rem; margin-bottom: 1rem;">
+                        <div style="display: inline-block;">
+                            <div style="display: flex; align-items: center; gap: 1rem; color: var(--corp-primary);">
+                                <div style="width: 2rem; height: 2rem; border: 3px solid var(--corp-gray-200); border-top-color: var(--corp-primary); border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+                                <div style="font-size: 1rem; font-weight: 500;">
+                                    Running TOPSIS analysis... Please wait
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="topsis-content">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -61,6 +72,7 @@ window.DecisionSupportPage = {
                     <button id="run-topsis-btn" class="btn btn-primary">
                         <i class="fas fa-calculator"></i> Run TOPSIS Analysis
                     </button>
+                    </div>
                 </div>
             </div>
 
@@ -68,10 +80,22 @@ window.DecisionSupportPage = {
                 <div class="card mb-4">
                     <h3 class="card-title">📊 AHP Ranking</h3>
                     <p>Pairwise Comparisons (1-9 scale: 1 = equally important, 9 = extremely more important)</p>
+                    <div id="ahp-loading" style="display: none; text-align: center; padding: 2rem; margin-bottom: 1rem;">
+                        <div style="display: inline-block;">
+                            <div style="display: flex; align-items: center; gap: 1rem; color: var(--corp-primary);">
+                                <div style="width: 2rem; height: 2rem; border: 3px solid var(--corp-gray-200); border-top-color: var(--corp-primary); border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+                                <div style="font-size: 1rem; font-weight: 500;">
+                                    Running AHP analysis... Please wait
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="ahp-content">
                     <div id="ahp-comparisons"></div>
                     <button id="run-ahp-btn" class="btn btn-primary">
                         <i class="fas fa-calculator"></i> Run AHP Analysis
                     </button>
+                    </div>
                 </div>
             </div>
 
@@ -139,7 +163,7 @@ window.DecisionSupportPage = {
 
     async runTOPSIS() {
         try {
-            window.app.showLoading();
+            this.showLoading('topsis');
             const weights = {
                 unit_cost: parseFloat(document.getElementById('weight-cost').value),
                 quality_score: parseFloat(document.getElementById('weight-quality').value),
@@ -159,13 +183,13 @@ window.DecisionSupportPage = {
         } catch (error) {
             window.app.showError('Failed to run TOPSIS: ' + error.message);
         } finally {
-            window.app.hideLoading();
+            this.hideLoading('topsis');
         }
     },
 
     async runAHP() {
         try {
-            window.app.showLoading();
+            this.showLoading('ahp');
             const criteria = ['unit_cost', 'quality_score', 'on_time_delivery_rate', 'geopolitical_risk_score', 'esg_score'];
             const comparisons = {};
 
@@ -197,7 +221,7 @@ window.DecisionSupportPage = {
         } catch (error) {
             window.app.showError('Failed to run AHP: ' + error.message);
         } finally {
-            window.app.hideLoading();
+            this.hideLoading('ahp');
         }
     },
 
@@ -224,6 +248,22 @@ window.DecisionSupportPage = {
             { key: 'alternative', label: 'Supplier ID' },
             { key: scoreKey, label: 'Score', format: (v) => utils.formatNumber(v, 3) }
         ]);
+    },
+
+    showLoading(section) {
+        const loadingEl = document.getElementById(`${section}-loading`);
+        const contentEl = document.getElementById(`${section}-content`);
+        if (loadingEl) loadingEl.style.display = 'block';
+        if (contentEl) contentEl.style.opacity = '0.5';
+        if (contentEl) contentEl.style.pointerEvents = 'none';
+    },
+
+    hideLoading(section) {
+        const loadingEl = document.getElementById(`${section}-loading`);
+        const contentEl = document.getElementById(`${section}-content`);
+        if (loadingEl) loadingEl.style.display = 'none';
+        if (contentEl) contentEl.style.opacity = '1';
+        if (contentEl) contentEl.style.pointerEvents = 'auto';
     }
 };
 
