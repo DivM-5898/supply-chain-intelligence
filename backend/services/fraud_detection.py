@@ -218,13 +218,23 @@ class FraudDetectionService:
         else:
             raise ValueError(f"Model {model_type} not available")
         
+        # Calculate fraud risk with proper handling of edge cases
+        fraud_risk = []
+        for prob in fraud_proba:
+            if pd.isna(prob) or np.isnan(prob):
+                fraud_risk.append('Unknown')
+            elif prob < 0.3:
+                fraud_risk.append('Low')
+            elif prob < 0.7:
+                fraud_risk.append('Medium')
+            else:
+                fraud_risk.append('High')
+        
         results = pd.DataFrame({
             'supplier_id': df['supplier_id'].values,
             'fraud_probability': fraud_proba,
-            'is_fraud': fraud_pred,
-            'fraud_risk': pd.cut(fraud_proba,
-                               bins=[0, 0.3, 0.7, 1.0],
-                               labels=['Low', 'Medium', 'High'])
+            'is_fraud': fraud_pred.tolist(),  # Convert numpy array to list for JSON serialization
+            'fraud_risk': fraud_risk  # Use calculated risk levels
         })
         
         return results.sort_values('fraud_probability', ascending=False)

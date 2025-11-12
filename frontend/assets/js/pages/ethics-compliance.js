@@ -74,10 +74,15 @@ window.EthicsCompliancePage = {
                         <div class="form-group">
                             <label class="form-label">Feature for Bias Analysis</label>
                             <select id="bias-feature" class="form-control">
-                                <option value="country">Country</option>
-                                <option value="industry">Industry</option>
                                 <option value="years_in_business">Years in Business</option>
-                                <option value="employee_count">Employee Count</option>
+                                <option value="credit_score">Credit Score</option>
+                                <option value="profit_margin">Profit Margin</option>
+                                <option value="utilization_rate">Utilization Rate</option>
+                                <option value="geopolitical_risk_score">Geopolitical Risk Score</option>
+                                <option value="esg_score">ESG Score</option>
+                                <option value="compliance_score">Compliance Score</option>
+                                <option value="on_time_delivery_rate">On-Time Delivery Rate</option>
+                                <option value="quality_score">Quality Score</option>
                             </select>
                         </div>
                     </div>
@@ -129,24 +134,83 @@ window.EthicsCompliancePage = {
             const supplierId = document.getElementById('explain-supplier-id').value;
             const explanationType = document.getElementById('explanation-type').value;
 
-            const result = await (window.api).explainPrediction(supplierId, 'supplier_scoring', explanationType);
+            const result = await (window.api).explainPrediction(supplierId, 'xgboost', explanationType);
             if (result.error) {
                 window.app.showError(result.error);
                 return;
             }
 
             document.getElementById('explanation-results').style.display = 'block';
+            
+            // The API returns {explanation: {...data}, supplier_id: ...}
+            // For LIME: result.explanation is the direct list
+            // For SHAP: result.explanation contains shap_values, feature_names, etc.
             const explanation = result.explanation || {};
 
             if (explanationType === 'lime') {
-                const expList = explanation.explanation || [];
-                let html = `<h5>Feature Contributions:</h5><ul>`;
-                expList.slice(0, 10).forEach(([feature, contribution]) => {
-                    const color = contribution > 0 ? 'green' : 'red';
-                    html += `<li><strong>${feature}</strong>: <span style="color: ${color}">${utils.formatNumber(contribution, 4)}</span></li>`;
-                });
-                html += `</ul><p><strong>Prediction:</strong> ${utils.formatNumber(explanation.prediction, 3)}</p>`;
-                document.getElementById('explanation-display').innerHTML = html;
+                // LIME: explanation is already the list of tuples, not nested
+                const expList = Array.isArray(explanation) ? explanation : (explanation.explanation || []);
+                
+                console.log('[Ethics] LIME explanation:', expList);
+                
+                if (!expList || expList.length === 0) {
+                    document.getElementById('explanation-display').innerHTML = 
+                        '<div class="alert alert-warning">No explanation data available. Make sure the supplier exists and the model is trained.</div>';
+                    return;
+                }
+                
+                // Sort by absolute contribution
+                const sortedExp = expList.sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]));
+                
+                // Create horizontal bar chart
+                const chartData = [{
+                    x: sortedExp.map(([_, v]) => v),
+                    y: sortedExp.map(([k, _]) => k),
+                    type: 'bar',
+                    orientation: 'h',
+                    marker: {
+                        color: sortedExp.map(([_, v]) => v > 0 ? '#10b981' : '#ef4444'),
+                        line: { color: 'white', width: 1 }
+                    },
+                    text: sortedExp.map(([_, v]) => utils.formatNumber(v, 4)),
+                    textposition: 'outside'
+                }];
+                
+                const chartLayout = {
+                    title: {
+                        text: `LIME Explanation for ${supplierId}`,
+                        font: { size: 18, color: '#1A1A2E', family: 'Inter, sans-serif' }
+                    },
+                    xaxis: { 
+                        title: 'Feature Contribution',
+                        gridcolor: '#E9ECEF',
+                        zeroline: true,
+                        zerolinecolor: '#666',
+                        zerolinewidth: 2
+                    },
+                    yaxis: { 
+                        title: 'Feature',
+                        gridcolor: '#E9ECEF'
+                    },
+                    height: Math.max(400, sortedExp.length * 40),
+                    paper_bgcolor: 'transparent',
+                    plot_bgcolor: 'white',
+                    font: { family: 'Inter, sans-serif', color: '#495057' },
+                    margin: { l: 200, r: 100, t: 80, b: 80 }
+                };
+                
+                Plotly.newPlot('explanation-display', chartData, chartLayout, {responsive: true});
+                
+                // Add prediction info below chart
+                const predInfo = document.createElement('div');
+                predInfo.style.cssText = 'margin-top: 1rem; padding: 1rem; background: var(--corp-gray-50); border-radius: 8px;';
+                const predValue = result.prediction || explanation.prediction || 0;
+                predInfo.innerHTML = `
+                    <strong>Predicted Score:</strong> <span style="font-size: 1.2rem; color: var(--corp-primary);">${utils.formatNumber(predValue, 4)}</span>
+                    <br>
+                    <small class="text-muted">Green bars indicate positive contributions, red bars indicate negative contributions</small>
+                `;
+                document.getElementById('explanation-display').appendChild(predInfo);
             } else {
                 const shapValues = explanation.shap_values || [];
                 const featureNames = explanation.feature_names || [];
@@ -161,17 +225,57 @@ window.EthicsCompliancePage = {
 
                 const chartData = [{
                     x: sorted.map(([_, v]) => v),
-                    y: sorted.map(([k, _]) => k),
+                    y: sorted.map(([k, _]) => k.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())),
                     type: 'bar',
                     orientation: 'h',
-                    marker: { color: sorted.map(([_, v]) => v), colorscale: 'RdBu' }
+                    marker: {
+                        color: sorted.map(([_, v]) => v),
+                        colorscale: [
+                            [0, '#ef4444'],      // Red for negative
+                            [0.5, '#f3f4f6'],    // Gray for neutral
+                            [1, '#10b981']       // Green for positive
+                        ],
+                        line: { color: 'white', width: 1 }
+                    },
+                    text: sorted.map(([_, v]) => utils.formatNumber(v, 4)),
+                    textposition: 'outside'
                 }];
-                Plotly.newPlot('explanation-display', chartData, {
-                    title: 'SHAP Feature Importance',
-                    xaxis: { title: 'SHAP Value' },
-                    yaxis: { title: 'Feature' },
-                    height: 400
-                });
+                
+                const chartLayout = {
+                    title: {
+                        text: `SHAP Feature Importance for ${supplierId}`,
+                        font: { size: 18, color: '#1A1A2E', family: 'Inter, sans-serif' }
+                    },
+                    xaxis: { 
+                        title: 'SHAP Value',
+                        gridcolor: '#E9ECEF',
+                        zeroline: true,
+                        zerolinecolor: '#666',
+                        zerolinewidth: 2
+                    },
+                    yaxis: { 
+                        title: 'Feature',
+                        gridcolor: '#E9ECEF'
+                    },
+                    height: Math.max(400, sorted.length * 40),
+                    paper_bgcolor: 'transparent',
+                    plot_bgcolor: 'white',
+                    font: { family: 'Inter, sans-serif', color: '#495057' },
+                    margin: { l: 200, r: 100, t: 80, b: 80 }
+                };
+                
+                Plotly.newPlot('explanation-display', chartData, chartLayout, {responsive: true});
+                
+                // Add interpretation info
+                const interpInfo = document.createElement('div');
+                interpInfo.style.cssText = 'margin-top: 1rem; padding: 1rem; background: var(--corp-gray-50); border-radius: 8px;';
+                interpInfo.innerHTML = `
+                    <small class="text-muted">
+                        <strong>How to read:</strong> Positive SHAP values (green) increase the prediction, 
+                        negative values (red) decrease it. The larger the absolute value, the stronger the effect.
+                    </small>
+                `;
+                document.getElementById('explanation-display').appendChild(interpInfo);
             }
 
             window.app.showSuccess('Explanation generated successfully!');
@@ -195,18 +299,71 @@ window.EthicsCompliancePage = {
 
             document.getElementById('bias-results').style.display = 'block';
             const correlation = result.correlation || 0;
-            let html = `<p><strong>Correlation with Predictions:</strong> ${utils.formatNumber(correlation, 3)}</p>`;
+            const interpretation = result.interpretation || '';
+            const pValue = result.p_value || 0;
+            
+            let html = `
+                <div style="padding: 1.5rem; background: var(--corp-gray-50); border-radius: 8px; margin-bottom: 1rem;">
+                    <h5 style="margin-bottom: 1rem; color: var(--corp-primary);">📊 Statistical Analysis</h5>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <strong>Correlation:</strong> 
+                            <span style="font-size: 1.5rem; color: var(--corp-primary);">${utils.formatNumber(correlation, 3)}</span>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>P-Value:</strong> 
+                            <span style="font-size: 1.5rem; color: ${pValue < 0.05 ? '#ef4444' : '#10b981'};">${pValue < 0.0001 ? '< 0.0001' : utils.formatNumber(pValue, 4)}</span>
+                            ${pValue < 0.05 ? '<br><small class="text-danger">Statistically significant</small>' : '<br><small class="text-success">Not significant</small>'}
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Type:</strong> 
+                            <span>${result.correlation_type || 'pearson'}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
 
-            if (Math.abs(correlation) > 0.3) {
-                html += `<div class="alert alert-warning">⚠️ Potential bias detected! High correlation with predictions.</div>`;
+            // Features where high correlation is expected/desired (positive indicators)
+            const desirableFeatures = ['esg_score', 'compliance_score', 'quality_score', 'on_time_delivery_rate'];
+            // Features where correlation might indicate bias (demographic/geographic)
+            const sensitiveFeatures = ['country', 'region', 'industry'];
+            
+            const isDesirable = desirableFeatures.includes(featureName);
+            const isSensitive = sensitiveFeatures.includes(featureName);
+            
+            if (Math.abs(correlation) > 0.5) {
+                if (isDesirable) {
+                    html += `<div class="alert alert-info">📊 <strong>Strong Correlation (Expected):</strong> High ${featureName.replace(/_/g, ' ')} correlates with better predictions, which is desired model behavior.</div>`;
+                } else if (isSensitive) {
+                    html += `<div class="alert alert-danger">🚨 <strong>Strong Bias Detected!</strong> High correlation with ${featureName} suggests potential discrimination. Review model fairness.</div>`;
+                } else {
+                    html += `<div class="alert alert-warning">⚠️ <strong>Strong Correlation:</strong> High correlation detected. Evaluate if this is expected behavior.</div>`;
+                }
+            } else if (Math.abs(correlation) > 0.3) {
+                if (isSensitive) {
+                    html += `<div class="alert alert-warning">⚠️ <strong>Potential Bias:</strong> Moderate correlation with ${featureName} detected. Further investigation recommended.</div>`;
+                } else {
+                    html += `<div class="alert alert-info">ℹ️ <strong>Moderate Correlation:</strong> Some correlation detected with ${featureName}.</div>`;
+                }
             } else {
-                html += `<div class="alert alert-success">✅ Low correlation - bias unlikely</div>`;
+                html += `<div class="alert alert-success">✅ <strong>Low Correlation:</strong> Weak correlation suggests ${isSensitive ? 'minimal bias concerns' : 'minimal influence from this feature'}.</div>`;
             }
 
-            if (result.bias_analysis) {
-                html += `<div class="table-container mt-3"></div>`;
+            if (result.bias_analysis && result.bias_analysis.length > 0) {
+                html += `<h5 style="margin-top: 1.5rem; margin-bottom: 1rem;">Group Analysis</h5><div id="bias-group-table" class="table-container mt-3"></div>`;
                 document.getElementById('bias-display').innerHTML = html;
-                utils.createTable(result.bias_analysis, 'bias-display .table-container');
+                
+                // Detect if we have Category or Range
+                const firstRow = result.bias_analysis[0];
+                const groupKey = firstRow.hasOwnProperty('Category') ? 'Category' : 'Range';
+                const groupLabel = groupKey === 'Category' ? 'Category' : 'Range';
+                
+                utils.createTable(result.bias_analysis, 'bias-group-table', [
+                    { key: groupKey, label: groupLabel },
+                    { key: 'Avg_Prediction', label: 'Average Prediction', format: (v) => utils.formatNumber(v, 4) },
+                    { key: 'Std_Prediction', label: 'Std Dev', format: (v) => utils.formatNumber(v, 4) },
+                    { key: 'Count', label: 'Sample Size' }
+                ]);
             } else {
                 document.getElementById('bias-display').innerHTML = html;
             }

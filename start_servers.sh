@@ -24,8 +24,21 @@ fi
 
 # Kill any existing processes on ports 8000 and 8080
 echo "Checking for existing processes..."
-lsof -ti:8000 | xargs kill -9 2>/dev/null
-lsof -ti:8080 | xargs kill -9 2>/dev/null
+PORT_8000=$(lsof -ti:8000)
+PORT_8080=$(lsof -ti:8080)
+
+if [ ! -z "$PORT_8000" ]; then
+    echo "   Killing process on port 8000 (PID: $PORT_8000)..."
+    kill -9 $PORT_8000 2>/dev/null
+    sleep 2
+fi
+
+if [ ! -z "$PORT_8080" ]; then
+    echo "   Killing process on port 8080 (PID: $PORT_8080)..."
+    kill -9 $PORT_8080 2>/dev/null
+    sleep 2
+fi
+
 echo "✅ Ports cleared"
 echo ""
 

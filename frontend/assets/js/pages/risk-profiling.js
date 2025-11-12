@@ -9,6 +9,14 @@ window.RiskProfilingPage = {
         anomalyResults: null
     },
 
+    // Pagination state
+    riskPaginationState: {
+        currentPage: 1,
+        pageSize: 25,
+        filter: 'all',
+        allData: []
+    },
+
     async init() {
         const container = document.getElementById('page-risk-profiling');
         container.innerHTML = this.getHTML();
@@ -109,7 +117,37 @@ window.RiskProfilingPage = {
                     </button>
                     <div id="risk-results" style="display: none;">
                         <div id="risk-distribution-chart" class="chart-container-enhanced mb-3"></div>
+                        
+                        <!-- Filter and Pagination Controls -->
+                        <div class="mb-3" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                            <div>
+                                <label class="form-label-custom"><i class="fas fa-filter"></i> Filter by Risk Level:</label>
+                                <select id="risk-filter" class="form-control-custom" style="width: 200px;">
+                                    <option value="all">All Suppliers</option>
+                                    <option value="High">High Risk</option>
+                                    <option value="Medium">Medium Risk</option>
+                                    <option value="Low">Low Risk</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="form-label-custom"><i class="fas fa-list"></i> Items per page:</label>
+                                <select id="risk-page-size" class="form-control-custom" style="width: 120px;">
+                                    <option value="10">10</option>
+                                    <option value="25" selected>25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="all">All</option>
+                                </select>
+                            </div>
+                            <div style="margin-left: auto;">
+                                <span id="risk-count-display" style="font-weight: 600; color: var(--corp-primary);"></span>
+                            </div>
+                        </div>
+                        
                         <div id="risk-table" class="table-container-enhanced"></div>
+                        
+                        <!-- Pagination Controls -->
+                        <div id="risk-pagination" class="mt-3" style="display: flex; justify-content: center; gap: 0.5rem;"></div>
                     </div>
                 </div>
             </div>
@@ -262,6 +300,9 @@ window.RiskProfilingPage = {
         // Display risk results
         if (result.risk_results && result.risk_results.length > 0) {
             const risks = result.risk_results;
+            this.riskPaginationState.allData = risks;
+            this.riskPaginationState.currentPage = 1;
+            
             document.getElementById('risk-results').style.display = 'block';
             
             const riskCounts = {};
@@ -285,11 +326,11 @@ window.RiskProfilingPage = {
                 plot_bgcolor: 'transparent'
             });
             
-            utils.createTable(risks.slice(0, 20), 'risk-table', [
-                { key: 'supplier_id', label: 'Supplier ID' },
-                { key: 'risk_probability', label: 'Risk Probability', format: (v) => utils.formatPercentage(v) },
-                { key: 'risk_level', label: 'Risk Level' }
-            ]);
+            // Setup filter and pagination listeners
+            this.setupRiskFilterListeners();
+            
+            // Display paginated table
+            this.displayRiskTable();
         }
         
         // Display anomaly results
@@ -339,8 +380,12 @@ window.RiskProfilingPage = {
 
             const risks = result.results || [];
             this.currentRiskData.riskResults = risks;
+            this.riskPaginationState.allData = risks;
+            this.riskPaginationState.currentPage = 1;
+            
             document.getElementById('risk-results').style.display = 'block';
 
+            // Display risk distribution chart
             const riskCounts = {};
             risks.forEach(r => {
                 const level = r.risk_level || 'Unknown';
@@ -362,11 +407,11 @@ window.RiskProfilingPage = {
                 plot_bgcolor: 'transparent'
             });
 
-            utils.createTable(risks.slice(0, 20), 'risk-table', [
-                { key: 'supplier_id', label: 'Supplier ID' },
-                { key: 'risk_probability', label: 'Risk Probability', format: (v) => utils.formatPercentage(v) },
-                { key: 'risk_level', label: 'Risk Level' }
-            ]);
+            // Setup filter and pagination listeners
+            this.setupRiskFilterListeners();
+            
+            // Display paginated table
+            this.displayRiskTable();
 
             window.app.showSuccess(`Analyzed ${result.total_suppliers} suppliers!`);
         } catch (error) {
@@ -374,6 +419,165 @@ window.RiskProfilingPage = {
         } finally {
             window.app.hideLoading();
         }
+    },
+
+    setupRiskFilterListeners() {
+        const filterSelect = document.getElementById('risk-filter');
+        const pageSizeSelect = document.getElementById('risk-page-size');
+        
+        if (filterSelect && !filterSelect.dataset.listenerAdded) {
+            filterSelect.dataset.listenerAdded = 'true';
+            filterSelect.addEventListener('change', (e) => {
+                this.riskPaginationState.filter = e.target.value;
+                this.riskPaginationState.currentPage = 1;
+                this.displayRiskTable();
+            });
+        }
+        
+        if (pageSizeSelect && !pageSizeSelect.dataset.listenerAdded) {
+            pageSizeSelect.dataset.listenerAdded = 'true';
+            pageSizeSelect.addEventListener('change', (e) => {
+                this.riskPaginationState.pageSize = e.target.value === 'all' ? 'all' : parseInt(e.target.value);
+                this.riskPaginationState.currentPage = 1;
+                this.displayRiskTable();
+            });
+        }
+    },
+
+    displayRiskTable() {
+        const allData = this.riskPaginationState.allData;
+        const filter = this.riskPaginationState.filter;
+        const pageSize = this.riskPaginationState.pageSize;
+        const currentPage = this.riskPaginationState.currentPage;
+        
+        // Filter data
+        let filteredData = allData;
+        if (filter !== 'all') {
+            filteredData = allData.filter(r => r.risk_level === filter);
+        }
+        
+        // Update count display
+        const countDisplay = document.getElementById('risk-count-display');
+        if (countDisplay) {
+            countDisplay.textContent = `Showing ${filteredData.length} of ${allData.length} suppliers`;
+        }
+        
+        // Paginate data
+        let paginatedData = filteredData;
+        let totalPages = 1;
+        
+        if (pageSize !== 'all') {
+            totalPages = Math.ceil(filteredData.length / pageSize);
+            const startIdx = (currentPage - 1) * pageSize;
+            const endIdx = startIdx + pageSize;
+            paginatedData = filteredData.slice(startIdx, endIdx);
+        }
+        
+        // Create table with color-coded risk levels
+        const tableData = paginatedData.map(r => ({
+            ...r,
+            risk_level: r.risk_level
+        }));
+        
+        utils.createTable(tableData, 'risk-table', [
+            { key: 'supplier_id', label: 'Supplier ID' },
+            { key: 'risk_probability', label: 'Risk Probability', format: (v) => utils.formatPercentage(v) },
+            { 
+                key: 'risk_level', 
+                label: 'Risk Level',
+                format: (v) => {
+                    const colors = {
+                        'High': 'background: #ef4444; color: white; padding: 4px 12px; border-radius: 4px; font-weight: 600;',
+                        'Medium': 'background: #f59e0b; color: white; padding: 4px 12px; border-radius: 4px; font-weight: 600;',
+                        'Low': 'background: #10b981; color: white; padding: 4px 12px; border-radius: 4px; font-weight: 600;'
+                    };
+                    return `<span style="${colors[v] || ''}">${v}</span>`;
+                }
+            }
+        ]);
+        
+        // Render pagination controls
+        if (pageSize !== 'all' && totalPages > 1) {
+            this.renderRiskPagination(totalPages);
+        } else {
+            document.getElementById('risk-pagination').innerHTML = '';
+        }
+    },
+
+    renderRiskPagination(totalPages) {
+        const paginationContainer = document.getElementById('risk-pagination');
+        const currentPage = this.riskPaginationState.currentPage;
+        
+        let paginationHTML = '';
+        
+        // Previous button
+        paginationHTML += `
+            <button class="btn btn-sm ${currentPage === 1 ? 'btn-secondary' : 'btn-primary'}" 
+                    onclick="window.RiskProfilingPage.goToRiskPage(${currentPage - 1})" 
+                    ${currentPage === 1 ? 'disabled' : ''}>
+                <i class="fas fa-chevron-left"></i> Previous
+            </button>
+        `;
+        
+        // Page numbers
+        const maxPagesToShow = 5;
+        let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+        let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+        
+        if (endPage - startPage < maxPagesToShow - 1) {
+            startPage = Math.max(1, endPage - maxPagesToShow + 1);
+        }
+        
+        if (startPage > 1) {
+            paginationHTML += `<button class="btn btn-sm btn-outline-primary" onclick="window.RiskProfilingPage.goToRiskPage(1)">1</button>`;
+            if (startPage > 2) {
+                paginationHTML += `<span style="padding: 0 8px;">...</span>`;
+            }
+        }
+        
+        for (let i = startPage; i <= endPage; i++) {
+            paginationHTML += `
+                <button class="btn btn-sm ${i === currentPage ? 'btn-primary' : 'btn-outline-primary'}" 
+                        onclick="window.RiskProfilingPage.goToRiskPage(${i})">
+                    ${i}
+                </button>
+            `;
+        }
+        
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) {
+                paginationHTML += `<span style="padding: 0 8px;">...</span>`;
+            }
+            paginationHTML += `<button class="btn btn-sm btn-outline-primary" onclick="window.RiskProfilingPage.goToRiskPage(${totalPages})">${totalPages}</button>`;
+        }
+        
+        // Next button
+        paginationHTML += `
+            <button class="btn btn-sm ${currentPage === totalPages ? 'btn-secondary' : 'btn-primary'}" 
+                    onclick="window.RiskProfilingPage.goToRiskPage(${currentPage + 1})" 
+                    ${currentPage === totalPages ? 'disabled' : ''}>
+                Next <i class="fas fa-chevron-right"></i>
+            </button>
+        `;
+        
+        paginationContainer.innerHTML = paginationHTML;
+    },
+
+    goToRiskPage(page) {
+        const totalPages = Math.ceil(
+            (this.riskPaginationState.filter === 'all' 
+                ? this.riskPaginationState.allData.length 
+                : this.riskPaginationState.allData.filter(r => r.risk_level === this.riskPaginationState.filter).length
+            ) / this.riskPaginationState.pageSize
+        );
+        
+        if (page < 1 || page > totalPages) return;
+        
+        this.riskPaginationState.currentPage = page;
+        this.displayRiskTable();
+        
+        // Scroll to table
+        document.getElementById('risk-table').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     },
 
     async detectAnomalies() {

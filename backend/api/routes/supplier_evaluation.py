@@ -287,10 +287,11 @@ async def upload_and_evaluate(
             if missing_columns:
                 print(f"Added default values for missing columns: {', '.join(missing_columns)}")
             
-            # Prepare features from uploaded data
+            # Prepare features from uploaded data - USE SAME SETTINGS AS TRAINING
             try:
                 from utils.preprocessing import preprocessor
-                df_processed, feature_cols = preprocessor.prepare_supplier_features(df, use_advanced_features=False)
+                # IMPORTANT: Use same advanced features as training
+                df_processed, _ = preprocessor.prepare_supplier_features(df, use_advanced_features=True)
             except KeyError as e:
                 missing_col = str(e).strip("'")
                 raise HTTPException(
@@ -311,14 +312,18 @@ async def upload_and_evaluate(
             
             # Prepare features for prediction
             try:
-                # Ensure all feature columns exist
-                missing_features = [col for col in feature_cols if col not in df_processed.columns]
+                # IMPORTANT: Use the EXACT feature columns that the model was trained on
+                model_feature_cols = supplier_scoring_service.feature_columns
+                
+                # Ensure all model feature columns exist in processed data
+                missing_features = [col for col in model_feature_cols if col not in df_processed.columns]
                 if missing_features:
                     # Fill missing features with 0
                     for col in missing_features:
                         df_processed[col] = 0
                 
-                X = df_processed[feature_cols].fillna(0)
+                # Use model's feature columns, not preprocessor's feature columns
+                X = df_processed[model_feature_cols].fillna(0)
                 
                 # Get model and scale if needed
                 model = supplier_scoring_service.models[model_type]

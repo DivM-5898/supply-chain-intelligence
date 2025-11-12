@@ -355,14 +355,24 @@ class RiskPredictionService:
             else:
                 anomaly_reasons.append('')
         
+        # Calculate severity based on anomaly score
+        # Anomaly scores are negative: more negative = more anomalous
+        # Typical range: -0.6 to 0.2 (lower is worse)
+        severity_labels = []
+        for score in anomaly_scores:
+            if score < -0.4:  # Very anomalous
+                severity_labels.append('High')
+            elif score < -0.2:  # Moderately anomalous
+                severity_labels.append('Medium')
+            else:  # Less anomalous
+                severity_labels.append('Low')
+        
         results = pd.DataFrame({
             'supplier_id': df['supplier_id'].values,
             'is_anomaly': (anomalies == -1),
             'anomaly_score': anomaly_scores,
             'anomaly_reason': anomaly_reasons,
-            'severity': pd.cut(-anomaly_scores,
-                              bins=[-np.inf, -0.5, -0.3, np.inf],
-                              labels=['High', 'Medium', 'Low'])
+            'severity': severity_labels
         })
         
         return results.sort_values('anomaly_score')

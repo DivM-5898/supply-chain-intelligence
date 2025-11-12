@@ -71,7 +71,7 @@ window.SupplierEvaluationPage = {
             <!-- File Upload Section - MOVED TO TOP -->
             <div class="card mb-4" data-aos="fade-up" data-aos-delay="200" style="border: 2px solid var(--corp-primary);">
                 <div class="card-header-custom" style="background: var(--gradient-primary); color: white;">
-                    <h3><i class="fas fa-file-upload"></i> 📁 Upload & Evaluate Your CSV/Excel File</h3>
+                    <h3><i class="fas fa-file-upload"></i> 📁 Upload Your CSV/Excel File</h3>
                 </div>
                 <div class="card-body" style="padding: 2rem;">
                     <div class="alert alert-info mb-3">
@@ -82,33 +82,23 @@ window.SupplierEvaluationPage = {
                         geopolitical_risk_score, esg_score, compliance_score, etc.
                     </div>
                     <div class="row">
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-9 mb-3">
                             <label class="form-label-custom"><i class="fas fa-file"></i> Select File</label>
                             <input type="file" id="file-input" class="form-control-custom" accept=".csv,.xlsx,.xls">
                             <small class="text-muted">Supported formats: CSV, Excel (.xlsx, .xls)</small>
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <label class="form-label-custom"><i class="fas fa-robot"></i> Model</label>
-                            <select id="upload-model-type" class="form-control-custom">
-                                <option value="xgboost">XGBoost</option>
-                                <option value="random_forest">Random Forest</option>
-                                <option value="gradient_boosting">Gradient Boosting</option>
-                                <option value="svm">SVM</option>
-                                <option value="neural_network">Neural Network</option>
-                                <option value="adaboost">AdaBoost</option>
-                                <option value="ensemble">Ensemble</option>
-                            </select>
-                        </div>
                         <div class="col-md-3 mb-3 d-flex align-items-end">
-                            <button id="upload-evaluate-btn" class="btn-primary-custom w-100" disabled>
-                                <i class="fas fa-upload"></i> Upload & Evaluate
+                            <button id="upload-file-btn" class="btn-primary-custom w-100" disabled>
+                                <i class="fas fa-upload"></i> Upload File
                             </button>
                         </div>
                     </div>
                     <div id="file-info" class="mt-2" style="display: none;">
                         <div class="alert alert-success">
                             <i class="fas fa-check-circle"></i> 
-                            <span id="file-name-display"></span> selected
+                            File uploaded: <strong><span id="file-name-display"></span></strong>
+                            <br>
+                            <small class="text-muted">Suppliers loaded: <span id="suppliers-count">0</span></small>
                         </div>
                     </div>
                 </div>
@@ -240,7 +230,7 @@ window.SupplierEvaluationPage = {
         
         // File upload handlers
         const fileInput = document.getElementById('file-input');
-        const uploadBtn = document.getElementById('upload-evaluate-btn');
+        const uploadBtn = document.getElementById('upload-file-btn');
         const fileInfo = document.getElementById('file-info');
         const fileNameDisplay = document.getElementById('file-name-display');
         
@@ -248,15 +238,13 @@ window.SupplierEvaluationPage = {
             const file = e.target.files[0];
             if (file) {
                 uploadBtn.disabled = false;
-                fileNameDisplay.textContent = file.name;
-                fileInfo.style.display = 'block';
             } else {
                 uploadBtn.disabled = true;
                 fileInfo.style.display = 'none';
             }
         });
         
-        uploadBtn.addEventListener('click', () => this.uploadAndEvaluate());
+        uploadBtn.addEventListener('click', () => this.uploadFile());
         
         // Chatbot handlers
         document.getElementById('get-rationale-btn').addEventListener('click', () => this.getRankingRationale());
@@ -365,7 +353,6 @@ window.SupplierEvaluationPage = {
         try {
             console.log('[SupplierEvaluation] evaluateSuppliers called');
             console.log('[SupplierEvaluation] window.api:', window.api);
-            console.log('[SupplierEvaluation] typeof api:', typeof api);
             
             window.app.showLoading();
             
@@ -376,27 +363,64 @@ window.SupplierEvaluationPage = {
             }
             
             const modelType = document.getElementById('model-type').value;
-            console.log('[SupplierEvaluation] Calling evaluateSuppliers with model:', modelType);
-            const result = await window.api.evaluateSuppliers(null, modelType);
+            const topN = parseInt(document.getElementById('top-n').value) || null;
             
-            if (result.error) {
-                window.app.showError(result.error);
-                return;
-            }
+            console.log('[SupplierEvaluation] Model:', modelType, 'TopN:', topN);
+            
+            // Check if user uploaded a CSV file
+            if (this.uploadedCSVData && this.uploadedFileName) {
+                console.log('[SupplierEvaluation] Using uploaded CSV file');
+                
+                // Create a File object from the stored data
+                const blob = new Blob([this.uploadedCSVData], { type: 'text/csv' });
+                const file = new File([blob], this.uploadedFileName, { type: 'text/csv' });
+                
+                // Call uploadAndEvaluate API with the file
+                const result = await window.api.uploadAndEvaluate(file, modelType, topN);
+                
+                if (result.error) {
+                    window.app.showError(result.error);
+                    return;
+                }
+                
+                // Store results for chatbot
+                this.currentEvaluationData.modelType = modelType;
+                this.currentEvaluationData.results = result.results || [];
+                
+                this.displayResults(result);
+                document.getElementById('total-suppliers').textContent = result.total_suppliers;
+                const avgScore = result.results.reduce((sum, r) => sum + r.predicted_score, 0) / result.results.length;
+                document.getElementById('avg-score').textContent = avgScore.toFixed(2);
+                window.app.showSuccess(result.message || `Successfully evaluated ${result.total_suppliers} suppliers!`);
+                
+            } else {
+                // Use default data
+                console.log('[SupplierEvaluation] Using default data');
+                const result = await window.api.evaluateSuppliers(null, modelType);
+                
+                if (result.error) {
+                    window.app.showError(result.error);
+                    return;
+                }
 
-            this.displayResults(result);
-            document.getElementById('total-suppliers').textContent = result.total_suppliers;
-            const avgScore = result.results.reduce((sum, r) => sum + r.predicted_score, 0) / result.results.length;
-            document.getElementById('avg-score').textContent = avgScore.toFixed(2);
-            window.app.showSuccess(`Evaluated ${result.total_suppliers} suppliers successfully!`);
+                this.displayResults(result);
+                document.getElementById('total-suppliers').textContent = result.total_suppliers;
+                const avgScore = result.results.reduce((sum, r) => sum + r.predicted_score, 0) / result.results.length;
+                document.getElementById('avg-score').textContent = avgScore.toFixed(2);
+                window.app.showSuccess(`Evaluated ${result.total_suppliers} suppliers successfully!`);
+            }
         } catch (error) {
+            console.error('[SupplierEvaluation] Error:', error);
             window.app.showError('Failed to evaluate suppliers: ' + error.message);
         } finally {
             window.app.hideLoading();
         }
     },
 
-    async uploadAndEvaluate() {
+    uploadedCSVData: null,
+    uploadedFileName: null,
+
+    async uploadFile() {
         try {
             const fileInput = document.getElementById('file-input');
             const file = fileInput.files[0];
@@ -406,45 +430,34 @@ window.SupplierEvaluationPage = {
                 return;
             }
             
-            const modelType = document.getElementById('upload-model-type').value;
-            const topN = parseInt(document.getElementById('top-n').value) || null;
-            
             window.app.showLoading();
             
-            if (!window.api) {
-                throw new Error('API client not available. Please refresh the page.');
-            }
-            
-            console.log('[SupplierEvaluation] Uploading file:', file.name, 'Model:', modelType);
-            
-            const result = await window.api.uploadAndEvaluate(file, modelType, topN);
-            
-            if (result.error) {
-                window.app.showError(result.error);
-                return;
-            }
-            
-            // Store data for chatbot
-            // Read CSV content for chatbot
+            // Read file content
             const csvText = await file.text();
-            this.currentEvaluationData = {
-                csvData: csvText,
-                modelType: modelType,
-                results: result.results || [],
-                fileName: file.name
-            };
             
-            // Display results
-            this.displayResults(result);
-            document.getElementById('total-suppliers').textContent = result.total_suppliers;
-            const avgScore = result.results.reduce((sum, r) => sum + r.predicted_score, 0) / result.results.length;
-            document.getElementById('avg-score').textContent = avgScore.toFixed(2);
+            // Parse CSV to count suppliers
+            const lines = csvText.split('\n').filter(line => line.trim());
+            const supplierCount = lines.length - 1; // Exclude header
             
-            window.app.showSuccess(result.message || `Successfully evaluated ${result.total_suppliers} suppliers from uploaded file!`);
+            // Store uploaded data
+            this.uploadedCSVData = csvText;
+            this.uploadedFileName = file.name;
+            
+            // Update UI
+            document.getElementById('file-name-display').textContent = file.name;
+            document.getElementById('suppliers-count').textContent = supplierCount;
+            document.getElementById('file-info').style.display = 'block';
+            document.getElementById('total-suppliers').textContent = supplierCount;
+            
+            // Store for chatbot
+            this.currentEvaluationData.csvData = csvText;
+            this.currentEvaluationData.fileName = file.name;
+            
+            window.app.showSuccess(`File uploaded successfully! ${supplierCount} suppliers loaded. Now click "Evaluate Suppliers" to analyze.`);
             
         } catch (error) {
-            console.error('[SupplierEvaluation] Error uploading and evaluating:', error);
-            window.app.showError('Failed to upload and evaluate file: ' + error.message);
+            console.error('[SupplierEvaluation] Error uploading file:', error);
+            window.app.showError('Failed to upload file: ' + error.message);
         } finally {
             window.app.hideLoading();
         }

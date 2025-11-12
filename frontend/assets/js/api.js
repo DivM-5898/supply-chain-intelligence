@@ -234,7 +234,7 @@ window.APIClient = class APIClient {
     }
 
     // Ethics & Compliance
-    async explainPrediction(supplierId, modelType = 'supplier_scoring', explanationType = 'lime') {
+    async explainPrediction(supplierId, modelType = 'xgboost', explanationType = 'lime') {
         return this.request('/ethics/explain', {
             method: 'POST',
             body: JSON.stringify({
@@ -245,14 +245,14 @@ window.APIClient = class APIClient {
         });
     }
 
-    async getShapValues(supplierIds, modelType = 'supplier_scoring') {
+    async getShapValues(supplierIds, modelType = 'xgboost') {
         return this.request('/ethics/shap-values', {
             method: 'POST',
             body: JSON.stringify({ supplier_ids: supplierIds, model_type: modelType })
         });
     }
 
-    async detectBias(featureName, modelType = 'supplier_scoring') {
+    async detectBias(featureName, modelType = 'xgboost') {
         return this.request('/ethics/bias-detection', {
             method: 'POST',
             body: JSON.stringify({ feature_name: featureName, model_type: modelType })

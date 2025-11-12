@@ -132,22 +132,25 @@ window.DecisionSupportPage = {
     },
 
     setupAHPComparisons() {
-        const criteria = ['Cost', 'Quality', 'Delivery', 'Risk', 'ESG'];
+        const criteriaDisplay = ['Cost', 'Quality', 'Delivery', 'Risk', 'ESG'];
+        const criteriaNames = ['unit_cost', 'quality_score', 'on_time_delivery_rate', 'geopolitical_risk_score', 'esg_score'];
         const container = document.getElementById('ahp-comparisons');
         container.innerHTML = '';
 
-        criteria.forEach((c1, i) => {
-            criteria.slice(i + 1).forEach(c2 => {
+        criteriaDisplay.forEach((c1Display, i) => {
+            criteriaDisplay.slice(i + 1).forEach((c2Display, j) => {
+                const c1Name = criteriaNames[i];
+                const c2Name = criteriaNames[i + j + 1];
                 const div = document.createElement('div');
                 div.className = 'form-group row';
                 div.innerHTML = `
                     <div class="col-md-4">
-                        <label>${c1} vs ${c2}</label>
+                        <label>${c1Display} vs ${c2Display}</label>
                     </div>
                     <div class="col-md-8">
                         <input type="range" class="form-control" min="1" max="9" step="1" value="1" 
-                               data-c1="${c1.toLowerCase()}" data-c2="${c2.toLowerCase()}" id="ahp-${c1}-${c2}">
-                        <span id="ahp-${c1}-${c2}-value">1</span>
+                               data-c1="${c1Name}" data-c2="${c2Name}" id="ahp-${c1Display}-${c2Display}">
+                        <span id="ahp-${c1Display}-${c2Display}-value">1</span>
                     </div>
                 `;
                 container.appendChild(div);
